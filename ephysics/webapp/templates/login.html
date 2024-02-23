@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+
+<h1>Login</h1>
+
+{% for msg in messages %}
+    {{msg}}
+{% endfor %}
+
+<form id="login_form" method="post" action="/login/">
+{% csrf_token %}
+Username: <input type="text" name="username" value="" size="50" />
+<br />
+Password: <input type="password" name="password" value="" size="50" />
+<br />
+
+<input type="submit" value="submit" />
+</form>
+
+<strong>Don't have an account? </strong>
+<a href="../register/">Sign up</a>
+
+{% endblock %}
