@@ -19,12 +19,14 @@ def register(request):
             profile.user = user
             
             #Check if form is not null and update the profile with the given data
-            if 'firstName' in user_form.cleaned_data:
-                profile.firstName = user_form.cleaned_data['firstName']
-            if 'lastName' in user_form.cleaned_data:
-                profile.lastName = user_form.cleaned_data['lastName']
+            if 'first_name' in user_form.cleaned_data:
+                profile.first_name = user_form.cleaned_data['first_name']
+            if 'last_name' in user_form.cleaned_data:
+                profile.last_name = user_form.cleaned_data['last_name']
             if 'age' in user_form.cleaned_data:
                 profile.age = user_form.cleaned_data['age']
+            if 'is_student' in user_form.cleaned_data:
+                profile.is_student = user_form.cleaned_data['is_student']
 
             profile.save()
             
@@ -70,3 +72,17 @@ def logout_view(request):
 def index(request):
 
     return render(request, 'index.html')
+
+
+def courses(request):
+
+    return render(request, 'courses.html')
+
+
+def course(request, pk):
+
+    return render(request, 'course.html')
+
+def profile(request):
+
+    return render(request, 'profile.html')

@@ -16,4 +16,4 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta : 
         model = AppUser
-        fields = ('firstName', 'lastName', 'age')
+        fields = ('first_name', 'last_name', 'age', 'is_student')
