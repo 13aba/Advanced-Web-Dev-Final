@@ -54,7 +54,9 @@
 
 {% endif %}
 
-
+{% for msg in messages %}
+    {{msg}}
+{% endfor %}
 
 {% block content %}
 {% endblock %}

@@ -4,10 +4,6 @@
 
 <h1>Login</h1>
 
-{% for msg in messages %}
-    {{msg}}
-{% endfor %}
-
 <form id="login_form" method="post" action="/login/">
 {% csrf_token %}
 Username: <input type="text" name="username" value="" size="50" />

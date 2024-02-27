@@ -2,6 +2,41 @@
 
 
 
+
+
 {% block content %}
-        <h1>profile</h1>
+        <h1>My Profile</h1>
+
+        <form id="update_profile" method="post" action="/profile/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            <div>
+                <label for="username">Username:</label>
+                <span>{{ request.user.username }}</span>
+            </div>
+            <!-- Exclude is_student field from profile page -->
+            {{ profile_form.first_name.label_tag }}
+            {{ profile_form.first_name }}
+            {{ profile_form.last_name.label_tag }}
+            {{ profile_form.last_name }}
+            {{ profile_form.age.label_tag }}
+            {{ profile_form.age }}
+
+            <!-- Section for updating password!-->
+            <div>
+                <h2>Change Password</h2>
+                {{ password_form.old_password.label_tag }}
+                {{ password_form.old_password }}
+                {{ password_form.new_password.label_tag }}
+                {{ password_form.new_password }}
+                {{ password_form.confirm_new_password.label_tag }}
+                {{ password_form.confirm_new_password }}
+            </div>
+        
+            
+
+            <input type="submit" name="submit" value="Update Profile" />
+        </form>
+
 {% endblock %}
