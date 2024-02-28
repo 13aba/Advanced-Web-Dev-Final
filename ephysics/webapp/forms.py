@@ -33,3 +33,7 @@ class PasswordChangeForm(forms.Form):
             raise forms.ValidationError("New passwords do not match.")
         #Return cleaned data if form is valid
         return cleaned_data
+
+class CourseForm(forms.Form):
+    title = forms.CharField(label="Course Title")
+    description = forms.CharField(label="Course Description", widget=forms.Textarea)

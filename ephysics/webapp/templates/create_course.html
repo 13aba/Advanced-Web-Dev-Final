@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+
+{% block content %}
+
+<h1>Create New Course</h1>
+
+<form id="course_form" method="post" action="/create_course/">
+{% csrf_token %}
+{{ course_form.as_p }}
+
+<input type="submit" name="submit" value="Create" />
+</form>
+
+
+{% endblock %}

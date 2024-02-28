@@ -3,5 +3,8 @@
 
 
 {% block content %}
-        <h1>courses</h1>
+        <h1>Courses</h1>
+        {% for course in courses %}
+                <p>{{course.title}}</p>
+        {% endfor %}
 {% endblock %}

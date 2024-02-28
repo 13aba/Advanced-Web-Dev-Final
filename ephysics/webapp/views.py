@@ -3,6 +3,7 @@ from .forms import *
 from .models import *
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
+from datetime import date
 
 
 def register(request):
@@ -71,17 +72,52 @@ def logout_view(request):
 
 def index(request):
 
-    return render(request, 'index.html')
+    #Get the user profile from request
+    user = request.user.appuser
+    #Check if the user is student or teacher
+    if user.is_student:
+        #Get the enrolled courses for students
+        try:
+            courses = Enrollment.objects.values_list("course").filter(student = user)
+        except Exception:
+            courses = None
+        context = {
+            'courses': courses
+        }
+        #Display student home page
+        return render(request, 'student_index.html', context)
+    else:
+        #Get the courses created by the teacher
+        try:
+            courses = Course.objects.filter(teacher = user)
+        except Exception:
+            courses = None
+        context = {
+            'courses' : courses
+        } 
+        #Display teacher home page
+        return render(request, 'teacher_index.html', context)  
+
+    
 
 
 def courses(request):
 
-    return render(request, 'courses.html')
+    courses = Course.objects.all()
+    context = {
+        'courses': courses
+    }
+
+    return render(request, 'courses.html', context)
 
 
 def course(request, pk):
 
-    return render(request, 'course.html')
+    courses = Course.objects.all()
+    context = {
+        'courses': courses
+    }
+    return render(request, 'course.html', context)
 
 def profile(request):
 
@@ -146,3 +182,30 @@ def profile(request):
         'profile_form': profile_form,
     }
     return render(request, 'profile.html', context)
+
+
+def create_course(request):
+
+    user = request.user.appuser
+
+    if request.method == 'POST':
+        course_form = CourseForm(data = request.POST)
+        if course_form.is_valid():
+            #Create new course from our the form and date
+            course = Course(title = course_form.cleaned_data['title'],
+                            description = course_form.cleaned_data['description'],
+                            created = date.today(),
+                            modified = date.today(),
+                            teacher = user)
+            #Save the course
+            course.save()
+            #Return success message and redirect back to home page
+            messages.success(request, 'Course created succesfully')
+            return redirect('/')
+    else:
+        course_form = CourseForm()
+    
+    context = {
+        'course_form': course_form
+    }
+    return render(request, 'create_course.html', context)

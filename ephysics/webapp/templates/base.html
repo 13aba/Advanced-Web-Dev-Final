@@ -1,4 +1,4 @@
-
+{% load static %}
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -14,6 +14,9 @@
     <meta name="author" content="Bayarbat" />
     <!-- Description of the web page !-->
     <meta name="description" content="Elearning website for physics!">
+    <!-- Include markup styling file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+
     <base href="/">
     <!-- Inform user of current page within site structure: shown on web page's tab -->
     <title>EPhysics</title>
