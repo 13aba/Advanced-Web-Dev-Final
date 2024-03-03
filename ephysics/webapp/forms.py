@@ -37,3 +37,6 @@ class PasswordChangeForm(forms.Form):
 class CourseForm(forms.Form):
     title = forms.CharField(label="Course Title")
     description = forms.CharField(label="Course Description", widget=forms.Textarea)
+
+class StatusForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Update your status', 'style': 'width: 100%; resize: None; height: 100px;', 'class': 'form-control'}))

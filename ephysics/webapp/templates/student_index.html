@@ -2,11 +2,45 @@
 
 
 {% block content %}
-        <div class="content">
-                <h1>Hello {{user.username}} </h1>
-                {% if user.appuser.is_student == false %}
-                        <h2> My Courses </h2>
-                        <a class="btn btn-info btn-lg active" href="#" role="button">Create New Course</a>
-                {% endif %}
+<div class="content">
+        <h1>Hello {{user.username}}!</h1>
+        <div class="container">
+                <div class="row full-height" >
+                        <!-- Column for courses !-->
+                        <div class="col-7 border-end border-primary border-2">
+                                <div class="row" style="height: 50%">
+                                        <h2 > My Courses </h2>
+                                        <div class="list-group border-secondary border-2" style="width: 90%; border-radius: 15px; margin-bottom: 10px;">
+                                                {% for course in courses %}
+                                                <a href="/course/{{course.id}}" class="list-group-item list-group-item-action list-group-item-secondary text-danger">{{course.title}} 
+                                                        <text class="float-end">Created: {{course.created}}</text>
+                                                </a>
+                                                {% endfor %}
+                                        </div>
+                                </div>
+                                <div class="row-6">
+                                        <h2> Upcoming Deadlines </h2>
+                                </div>
+                                
+                        </div>
+                        <!-- Column for status !-->
+                        <div class="col-5">
+                                <h2 > Status </h2>
+                                {% for update in status %}
+                                <div class="card" style="margin-bottom: 10px;">
+                                        <div class="card-body">
+                                         {{update.content}}
+                                         <p class="float-end text-info">Created: {{update.created_at}}</p>
+                                        </div>
+                                </div>
+                                {% endfor %}
+                                <form id="status-form" method="post" action="/create_status/">
+                                        {% csrf_token %}
+                                        {{status_form.content}}
+                                        <input class="btn btn-info btn-lg active " style="width: 100%; margin-top: 10px;"  type="submit" name="submit" value="Post Status" />
+                                </form>
+                        </div>
+                </div>
         </div>
+</div>
 {% endblock %}

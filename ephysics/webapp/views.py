@@ -74,26 +74,44 @@ def index(request):
 
     #Get the user profile from request
     user = request.user.appuser
+    #Create form for posting status for both teacher and student
+    status_form = StatusForm()
     #Check if the user is student or teacher
     if user.is_student:
-        #Get the enrolled courses for students
+        #Get the enrolled courses and status updates for students
         try:
             courses = Enrollment.objects.values_list("course").filter(student = user)
         except Exception:
             courses = None
+
+        try:
+            status = Status.objects.filter(user = user)
+        except Exception:
+            status = None
+
         context = {
-            'courses': courses
+            'courses': courses,
+            'status': status,
+            'status_form': status_form
         }
         #Display student home page
         return render(request, 'student_index.html', context)
     else:
-        #Get the courses created by the teacher
+        #Get the courses created by the teacher and status updates
         try:
             courses = Course.objects.filter(teacher = user)
         except Exception:
             courses = None
+        
+        try:
+            status = Status.objects.filter(user = user)
+        except Exception:
+            status = None
+
         context = {
-            'courses' : courses
+            'courses' : courses,
+            'status': status,
+            'status_form': status_form
         } 
         #Display teacher home page
         return render(request, 'teacher_index.html', context)  
@@ -202,6 +220,10 @@ def create_course(request):
             #Return success message and redirect back to home page
             messages.success(request, 'Course created succesfully')
             return redirect('/')
+        else:
+            #Return error message and redirect back to home page
+            messages.error(request, 'Unable to create course succesfully')
+            return redirect('/')
     else:
         course_form = CourseForm()
     
@@ -209,6 +231,34 @@ def create_course(request):
         'course_form': course_form
     }
     return render(request, 'create_course.html', context)
+
+def create_status(request):
+
+    user = request.user.appuser
+
+    if request.method == 'POST':
+        status_form = StatusForm(data = request.POST)
+        if status_form.is_valid():
+            status = Status(
+                user = user,
+                content = status_form.cleaned_data['content'],
+                created_at = date.today()
+            )
+            #Save the course
+            status.save()
+            #Return success message and redirect back to home page
+            messages.success(request, 'Status created succesfully')
+            return redirect('/')
+           
+        else:
+            #Return error message and redirect back to home page
+            messages.error(request, 'Unable to create status succesfully')
+            return redirect('/')
+    else:
+        #Return error message and redirect back to home page
+        messages.error(request, 'Unable to create status succesfully')
+        return redirect('/')
+    
 
 def delete_course(request, pk):
 
