@@ -209,3 +209,21 @@ def create_course(request):
         'course_form': course_form
     }
     return render(request, 'create_course.html', context)
+
+def delete_course(request, pk):
+
+    user = request.user.appuser
+
+    if request.method == 'POST':
+        course = Course.objects.get(id=pk)
+
+        #Check if teacher requesting deletion is the teacher that created the course
+        if user == course.teacher:
+            course.delete()
+            #Return success message and redirect back to home page
+            messages.success(request, 'Course deleted succesfully')
+            return redirect('/')
+        else:
+            #Return error message and redirect back to home page
+            messages.error(request, 'Something wrong with the request please check the URL and try again')
+            return redirect('/')

@@ -2,30 +2,62 @@
 
 
 {% block content %}
-        <div class="content">
-                <h1>Hello {{user.username}} </h1>
-                <h2> My Courses </h2>
-                {% for course in courses %}
-                        <!-- Referenced and modified from https://getbootstrap.com/docs/5.0/components/card/ !-->
-                        <div class="card " style="width: 90%;margin:auto; border-radius: 15px">
-                                <div class="card-body">
-                                <h5 class="card-title">{{course.title}}</h5>
-                                <div class="row">
-                                        <div class="col">
-                                          <!-- Left-aligned header -->
-                                          <h6 class="card-subtitle mb-2 text-muted">Created: {{course.created}}</h6>
-                                        </div>
-                                        <div class="col text-end">
-                                          <!-- Right-aligned header -->
-                                          <h6 class="card-subtitle mb-2 text-muted">Last Updated: {{course.modified}}</h6>
-                                        </div>
+<div class="content">
+        <h1>Hello {{user.username}} </h1>
+        <h2> My Courses </h2>
+        {% for course in courses %}
+        <!-- Referenced and modified from https://getbootstrap.com/docs/5.0/components/card/ !-->
+        <div class="card " style="width: 90%;margin:auto; border-radius: 15px">
+                <div class="card-body">
+                        <h5 class="card-title">{{course.title}}</h5>
+                        <div class="col">
+                                <div class="row text-end">
+                                        <!-- Left-aligned header -->
+                                        <h6 class="card-subtitle mb-2 text-muted">Created: {{course.created}}</h6>
                                 </div>
-                                <p class="card-text">Description: {{course.description}}</p>
-                                <a href="#" class="btn btn-info  float-end" style="margin-left: 10px;">Go To Course</a>
-                                <a href="#" class="float-end btn btn-danger">Delete Course</a>     
+                                <div class="row text-end">
+                                        <!-- Right-aligned header -->
+                                        <h6 class="card-subtitle mb-2 text-muted">Last Updated: {{course.modified}}</h6>
                                 </div>
                         </div>
-                {% endfor %}
-                <a class="btn btn-info btn-lg active" href="/create_course/" role="button">Create New Course</a>
+                        <p class="card-text">Description: {{course.description}}</p>
+                        <a href="#" class="btn btn-info  float-end" style="margin-left: 10px;">Go To Course</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteConfirmation">
+                                Delete Course
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                                <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                        Course {{course}} will be deleted permanently. This action is irreverisble.
+                                                        Delete the course? 
+                                                </div>
+                                                <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                        <form method="post" action="/delete_course/{{course.id}}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="user" value={{user.username}} /> 
+                                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
         </div>
+        {% endfor %}
+        <a class="btn btn-info btn-lg active" href="/create_course/" role="button">Create New Course</a>
+</div>
 {% endblock %}

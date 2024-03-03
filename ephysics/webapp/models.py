@@ -43,3 +43,11 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.student.username} enrolled in {self.course.title}"
+
+class Status(models.Model):
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateField(editable=False)
+
+    def __str__(self):
+        return f"{self.user} added new status at {self.created_at}"
