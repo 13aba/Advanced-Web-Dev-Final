@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="content">
-        <h2> Courses </h2>
+        <h1> Courses </h1>
         {% for course in courses %}
                 <!-- Referenced and modified from https://getbootstrap.com/docs/5.0/components/card/ !-->
-                <div class="card " style="width: 90%;margin:auto; border-radius: 15px">
+                <div class="card " style="width: 90%;margin:auto; border-radius: 15px;">
                         <div class="card-body">
                         <h5 class="card-title">{{course.title}}</h5>
                         <div class="row">
