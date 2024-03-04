@@ -9,6 +9,7 @@ h1 {
 }
 
 .content {
+    overflow-x: hidden;
     margin: auto;
     width: 100%;
 }
@@ -17,3 +18,27 @@ h1 {
     height: 70%;
 }
 
+.course-banner {
+    width: 100%;
+    height: 250px;
+    background-color: rgb(54, 94, 94);
+    padding-top: 30px;
+    padding-left: 75px;
+}
+
+.course-post {
+    padding-top: 40px;
+    padding-left: 10%;
+}
+
+.course-deadline {
+
+    padding-top: 40px;
+    padding-left: 10%;
+}
+
+.btn-xlg {
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 10px;
+}

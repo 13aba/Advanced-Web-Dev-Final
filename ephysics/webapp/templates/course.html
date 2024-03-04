@@ -4,7 +4,37 @@
 
 {% block content %}
 <div class="content">
-        <h1> Courses </h1>
+        <div class="course-banner">
+                <div class="row">
+                        <div class="col-8">
+                                <h2 class="display-2 text-light">{{course.title}}</h2>
+                                <h3 class="text-light">{{course.description}}</h3>
+                                <h4 class="text-light">Created By: 
+                                        <text class="text-warning">
+                                                {{course.teacher.first_name}} {{course.teacher.last_name}}
+                                        </text>
+                                </h4>
+                        </div>
+                        <div class="col-4">
+                                <a class="float-end btn btn-warning btn-xlg active" style="margin-right: 10%; margin-top: 20%;" href="/enroll_course/{{course.id}}" role="button">Enroll</a>  
+                        </div>
+                </div>
+        </div>
+
+        <div class="course-content">
+                <div class="row">
+                        <div class="col-8 border-end border-primary border-2" >
+                                <div class="course-post">
+                                        <h3>Course content</p>
+                                </div>
+                        </div>
+                        <div class="col-4">
+                                <div class="course-deadline">
+                                        <h3>Important dates</p>
+                                </div>
+                        </div>
+                </div>
+        </div>
         
 </div>
 {% endblock %}

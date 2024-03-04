@@ -131,9 +131,9 @@ def courses(request):
 
 def course(request, pk):
 
-    courses = Course.objects.all()
+    course = Course.objects.get(id = pk)
     context = {
-        'courses': courses
+        'course': course
     }
     return render(request, 'course.html', context)
 
