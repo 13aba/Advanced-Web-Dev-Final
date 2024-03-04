@@ -15,9 +15,23 @@
                                         </text>
                                 </h4>
                         </div>
+                        {% if request.user.appuser.is_student %}
                         <div class="col-4">
-                                <a class="float-end btn btn-warning btn-xlg active" style="margin-right: 10%; margin-top: 20%;" href="/enroll_course/{{course.id}}" role="button">Enroll</a>  
+                                {% if is_enrolled %}
+                                <form method="post" action="/leave_course/{{course.id}}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user" value={{user.username}} />
+                                        <button type="submit" class="float-end btn btn-danger btn-xlg active" style="margin-right: 10%; margin-top: 20%;">Leave</button>
+                                </form>
+                                {% else %}
+                                <form method="post" action="/enroll_course/{{course.id}}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user" value={{user.username}} />
+                                        <button type="submit" class="float-end btn btn-warning btn-xlg active" style="margin-right: 10%; margin-top: 20%;">Enroll</button>
+                                </form>
+                                {% endif %}  
                         </div>
+                        {% endif %}
                 </div>
         </div>
 

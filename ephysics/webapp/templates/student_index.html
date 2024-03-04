@@ -8,12 +8,12 @@
                 <div class="row full-height" >
                         <!-- Column for courses !-->
                         <div class="col-7 border-end border-primary border-2">
-                                <div class="row" style="height: 50%">
+                                <div class="row" style="min-height: 50%">
                                         <h2 > My Courses </h2>
                                         <div class="list-group border-secondary border-2" style="width: 90%; border-radius: 15px; margin-bottom: 10px;">
-                                                {% for course in courses %}
-                                                <a href="/course/{{course.id}}" class="list-group-item list-group-item-action list-group-item-secondary text-danger">{{course.title}} 
-                                                        <text class="float-end">Created: {{course.created}}</text>
+                                                {% for enrollment in enrollments %}
+                                                <a href="/course/{{enrollment.course.id}}" class="list-group-item list-group-item-action list-group-item-secondary text-danger">{{enrollment.course.title}} 
+                                                        <text class="float-end">Enrolled: {{enrollment.course.created}}</text>
                                                 </a>
                                                 {% endfor %}
                                         </div>

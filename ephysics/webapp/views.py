@@ -80,9 +80,9 @@ def index(request):
     if user.is_student:
         #Get the enrolled courses and status updates for students
         try:
-            courses = Enrollment.objects.values_list("course").filter(student = user)
+            enrollments = Enrollment.objects.filter(student = user)
         except Exception:
-            courses = None
+            enrollments = None
 
         try:
             status = Status.objects.filter(user = user)
@@ -90,7 +90,7 @@ def index(request):
             status = None
 
         context = {
-            'courses': courses,
+            'enrollments': enrollments,
             'status': status,
             'status_form': status_form
         }
@@ -131,9 +131,22 @@ def courses(request):
 
 def course(request, pk):
 
+    #Get the user profile from request
+    user = request.user.appuser
+
+    #Check if user is already enrolled to the course
+    try:
+        enrollment = Enrollment.objects.get(course = pk, student = user)
+        #If user is already enrolled send that information to frontend
+        is_enrolled = True
+    except:
+        #If user is not enrolled
+        is_enrolled = False 
+
     course = Course.objects.get(id = pk)
     context = {
-        'course': course
+        'course': course,
+        'is_enrolled': is_enrolled
     }
     return render(request, 'course.html', context)
 
@@ -277,3 +290,60 @@ def delete_course(request, pk):
             #Return error message and redirect back to home page
             messages.error(request, 'Something wrong with the request please check the URL and try again')
             return redirect('/')
+
+
+def enroll_course(request, pk):
+
+    user = request.user.appuser
+    #Check if user request using POST and if user is student 
+    #(We dont want teachers to be able to enroll into class. Teacher can create another student account for that purposes)
+    if request.method == 'POST' and user.is_student:
+        try:
+            course = Course.objects.get(id = pk)
+        except Exception:
+            messages.error(request, 'Could not find the course, try again later')
+            #Send user back to the requested page if requested course doesnot exist
+            #Referenced from https://stackoverflow.com/questions/35796195/how-to-redirect-to-previous-page-in-django-after-post-request
+            return redirect(request.META.get('HTTP_REFERER'))
+        #Create new enrollment
+        enrollment = Enrollment(student = user,
+                                course = course,
+                                enrolled_at = date.today()
+        )
+        #Save the new enrollment
+        enrollment.save()
+        #Return success message and redirect back to home page
+        messages.success(request, f'Enrolled successfully to course {course.title}')
+
+        return redirect(f'/course/{pk}')
+    else:
+        #If anything wrong show error message and redirect back to last page
+        messages.error(request, 'Something wrong with the enroll request try again')
+        #Send user back to the requested page if requested course doesnot exist
+        return redirect(request.META.get('HTTP_REFERER'))
+        
+def leave_course(request, pk):
+
+    user = request.user.appuser
+    #Check if user request using POST and if user is student 
+    #(We dont want teachers to be able to enroll and leave into class. Teacher can create another student account for that purposes)
+    if request.method == 'POST' and user.is_student:
+        try:
+            course = Course.objects.get(id = pk)
+        except Exception:
+            messages.error(request, 'Could not find the course, try again later')
+            #Send user back to the requested page if requested course doesnot exist
+            #Referenced from https://stackoverflow.com/questions/35796195/how-to-redirect-to-previous-page-in-django-after-post-request
+            return redirect(request.META.get('HTTP_REFERER'))
+        #Find the enrollment object
+        enrollment = Enrollment.objects.get(course = course, student = user)
+        #Delete the enrollment object
+        enrollment.delete()
+        #Return success message and redirect back to course page
+        messages.success(request, f'Left course {course.title} successfully')
+        return redirect(f'/course/{pk}')
+    else:
+        #If anything wrong show error message and redirect back to last page
+        messages.error(request, 'Something wrong with the enroll request try again')
+        #Send user back to the requested page if requested course doesnot exist
+        return redirect(request.META.get('HTTP_REFERER'))

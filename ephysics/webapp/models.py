@@ -15,6 +15,9 @@ class AppUser(models.Model):
     def __unicode__ (self):
         return self.user.username
 
+    def __str__ (self):
+        return self.user.username
+
 #Table for courses
 
 class Course(models.Model):
@@ -42,7 +45,7 @@ class Enrollment(models.Model):
     enrolled_at = models.DateField(editable=False)
 
     def __str__(self):
-        return f"{self.student.username} enrolled in {self.course.title}"
+        return f"{self.student.user.username} enrolled in {self.course.title}"
 
 class Status(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
@@ -50,4 +53,4 @@ class Status(models.Model):
     created_at = models.DateField(editable=False)
 
     def __str__(self):
-        return f"{self.user} added new status at {self.created_at}"
+        return f"{self.user.user.username} added new status at {self.created_at}"
