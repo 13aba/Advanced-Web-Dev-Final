@@ -50,3 +50,22 @@ h1 {
     width: 90%;
     padding-left: 5%;
 }
+
+
+
+.course-container {
+    width: 90%; 
+    margin-top: 10px; 
+    margin-bottom: 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    padding: 5px;
+    font-size: medium;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

@@ -399,3 +399,88 @@ def create_deadline(request, pk):
         #Return error message and redirect back to home page
         messages.error(request, 'Unable to create deadline, please try again')
         return redirect(request.META.get('HTTP_REFERER'))
+
+def delete_deadline(request, pk):
+
+    user = request.user.appuser
+
+    try:
+        deadline = Deadline.objects.get(id=pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    #Check if teacher requesting deletion is the teacher that created the course
+    if user == deadline.course.teacher:
+        deadline.delete()
+        #Return success message and redirect back to home page
+        messages.success(request, 'Deadline deleted succesfully')
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        #Return error message and redirect back to home page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+def create_post(request, pk):
+    
+    user = request.user.appuser
+    #Check if requested course exist
+    try:
+        course = Course.objects.get(id = pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    if request.method == 'POST':
+        #Check if user is creater of the course
+        if user == course.teacher: 
+            post_form = PostForm(request.POST, request.FILES)
+            if post_form.is_valid():
+                post = post_form.save(commit=False)
+                # Set the course for the post
+                post.course = course
+                post.created = date.today()
+                post.save()
+                # Return a success message and redirect back to course page
+                messages.success(request, 'Post created successfully.')
+                return redirect(f'/course/{pk}')
+        else:
+            #Return error message and redirect back to previous page
+            messages.error(request, 'Not authorized reqeust, please try again later!')
+            return redirect(request.META.get('HTTP_REFERER'))
+            
+    else:
+        # If it's a GET request, create a blank form
+        post_form = PostForm()
+    
+    context = {
+        'course': course,
+        'post_form': post_form
+    }
+    # Render the template with the form
+    return render(request, 'create_post.html', context)
+
+def delete_post(request, pk):
+
+    user = request.user.appuser
+
+    try:
+        post = Post.objects.get(id=pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    #Check if teacher requesting deletion is the teacher that created the course
+    if user == post.course.teacher:
+        post.delete()
+        #Return success message and redirect back to home page
+        messages.success(request, 'Post deleted succesfully')
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        #Return error message and redirect back to home page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+    

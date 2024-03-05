@@ -78,8 +78,26 @@
                                 <div class="course-post">
                                         <h3>Course content</p>
                                         {% if request.user.appuser == course.teacher %}
-                                        <a class="btn btn-info btn-lg active" style="width: 90%;" href="/create_post/" role="button">Create Post</a>       
+                                        <a class="btn btn-info btn-lg active" style="width: 90%;" href="/create_post/{{course.id}}" role="button">Create Post</a>       
                                         {% endif %}
+                                        {% for post in posts %}
+                                        <div class="course-container">
+                                                <h4>
+                                                        {{post.title}}
+                                                        <a class="btn btn-danger btn-sm active float-end" href="/delete_post/{{post.id}}" role="button">Delete Post</a>
+                                                </h4>
+                                                <text>{{post.content}}</text>
+                                                {% if post.image %}
+                                                        <img src="{{post.image.url}}">
+                                                {% endif %}
+                                                <p>
+                                                        {% if post.file %}
+                                                        <a href="{{post.file.url}}" download>{{post.file}}</a>
+                                                        {% endif %}
+                                                </p>
+                                               
+                                        </div>
+                                        {% endfor %}
                                 </div>
                         </div>
                         <div class="col-4">
@@ -96,17 +114,20 @@
                                                         </label>
                                                         {{deadline_form.due_date}}
                                                         <input type="hidden" name="user" value={{user.username}} />
-                                                        <button type="submit" class="btn btn-warning btn-sm active" style="width: 90%; margin-top: 15px;">Create Deadline</button>
+                                                        <button type="submit" class="btn btn-info btn-sm active" style="width: 90%; margin-top: 15px;">Create Deadline</button>
                                                 </form>
                                         </div>
                                         {% endif %}
                                         {% for deadline in deadlines %}
-                                        <div class="border-top border-info border-1" style="width: 90%;">
+                                        <div class="course-container">
                                                 <p> Task: {{deadline.title}}
                                                         <text class="float-end">
                                                                 Due by: {{deadline.due_date}}
                                                         </text>
                                                 </p>
+                                                {% if request.user.appuser == course.teacher %}
+                                                        <a class="btn btn-danger btn-sm active" style="width: 90%;" href="/delete_deadline/{{deadline.id}}" role="button">Delete deadline</a>
+                                                {% endif %}
                                         </div>
                                         {% endfor %}
                                 </div>

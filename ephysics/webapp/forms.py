@@ -44,3 +44,9 @@ class StatusForm(forms.Form):
 class DeadlineForm(forms.Form):
     title = forms.CharField(label='Task', widget=forms.TextInput(attrs={'placeholder': 'Deadline task', 'style': 'width: 90%; height: 30px; font-size: 20px;', 'class': 'form-control'}))
     due_date = forms.DateField(label='Due by:', widget=forms.SelectDateWidget(attrs={'style': 'width: 90%; height: 30px; font-size: 15px; padding-top: 0px; margin-bottom: 2px;', 'class': 'form-control'}))
+
+class PostForm(forms.ModelForm):
+
+    class Meta : 
+        model = Post
+        fields = ('title', 'content','image', 'file')

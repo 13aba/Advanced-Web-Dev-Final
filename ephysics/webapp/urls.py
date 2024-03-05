@@ -15,4 +15,7 @@ urlpatterns = [
     path('enroll_course/<int:pk>', views.enroll_course, name='enroll_course'),
     path('leave_course/<int:pk>', views.leave_course, name='leave_course'),
     path('create_deadline/<int:pk>', views.create_deadline, name='create_deadline'),
+    path('delete_deadline/<int:pk>', views.delete_deadline, name='delete_deadline'),
+    path('create_post/<int:pk>', views.create_post, name='create_post'),
+    path('delete_post/<int:pk>', views.delete_post, name='delete_post'),
 ]
