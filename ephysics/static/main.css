@@ -42,3 +42,11 @@ h1 {
     font-size: 20px;
     border-radius: 10px;
 }
+
+.deadline-creator {
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    width: 90%;
+    padding-left: 5%;
+}

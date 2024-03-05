@@ -88,11 +88,17 @@ def index(request):
             status = Status.objects.filter(user = user)
         except Exception:
             status = None
+        
+        try:
+            deadlines = Deadline.objects.filter(course__enrollment__student=user, due_date__gte=date.today())
+        except Exception:
+            deadlines = None
 
         context = {
             'enrollments': enrollments,
             'status': status,
-            'status_form': status_form
+            'status_form': status_form,
+            'deadlines': deadlines
         }
         #Display student home page
         return render(request, 'student_index.html', context)
@@ -134,19 +140,28 @@ def course(request, pk):
     #Get the user profile from request
     user = request.user.appuser
 
+
     #Check if user is already enrolled to the course
     try:
-        enrollment = Enrollment.objects.get(course = pk, student = user)
+        course = Course.objects.get(id = pk)
+        enrollment = Enrollment.objects.get(course = course, student = user)
         #If user is already enrolled send that information to frontend
         is_enrolled = True
     except:
         #If user is not enrolled
         is_enrolled = False 
+    
+    #Get all posts and deadlines related to the course
+    posts = Post.objects.filter(course = course)
+    deadlines = Deadline.objects.filter(course = course)
 
-    course = Course.objects.get(id = pk)
+    deadline_form = DeadlineForm()
     context = {
         'course': course,
-        'is_enrolled': is_enrolled
+        'is_enrolled': is_enrolled,
+        'deadline_form': deadline_form,
+        'posts': posts,
+        'deadlines': deadlines
     }
     return render(request, 'course.html', context)
 
@@ -346,4 +361,41 @@ def leave_course(request, pk):
         #If anything wrong show error message and redirect back to last page
         messages.error(request, 'Something wrong with the enroll request try again')
         #Send user back to the requested page if requested course doesnot exist
+        return redirect(request.META.get('HTTP_REFERER'))
+
+def create_deadline(request, pk):
+
+    #Get the user profile from request
+    user = request.user.appuser
+
+    #Check if user is course exist to create new deadline
+    try:
+        course = Course.objects.get(id = pk)
+    except:
+        #If course does not exist send user back after sending error message
+        messages.error(request, 'Something wrong with the enroll request try again')
+        #Send user back to the requested page if requested course doesnot exist
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    if request.method == 'POST':
+        deadline_form = DeadlineForm(data = request.POST)
+        if deadline_form.is_valid():
+            deadline = Deadline(
+                course = course,
+                title = deadline_form.cleaned_data['title'],
+                due_date = deadline_form.cleaned_data['due_date'],
+            )
+            #Save the deadline
+            deadline.save()
+            #Return success message and redirect back to requested page
+            messages.success(request, 'Deadline created succesfully')
+            return redirect(request.META.get('HTTP_REFERER'))
+           
+        else:
+            #Return error message and redirect back to home page
+            messages.error(request, 'Unable to create status succesfully')
+            return redirect('/')
+    else:
+        #Return error message and redirect back to home page
+        messages.error(request, 'Unable to create deadline, please try again')
         return redirect(request.META.get('HTTP_REFERER'))

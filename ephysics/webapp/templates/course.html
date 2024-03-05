@@ -73,7 +73,7 @@
         </div>
 
         <div class="course-content">
-                <div class="row">
+                <div class="row" style="min-height: 50%;">
                         <div class="col-8 border-end border-primary border-2" >
                                 <div class="course-post">
                                         <h3>Course content</p>
@@ -84,14 +84,31 @@
                         </div>
                         <div class="col-4">
                                 <div class="course-deadline">
-                                        <h3>Important dates</p>
+                                        <h3>Important dates</h3>
                                         {% if request.user.appuser == course.teacher %}
-                                        <form method="post" action="/enroll_course/{{course.id}}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="user" value={{user.username}} />
-                                                <button type="submit" class="float-end btn btn-warning btn-xlg active" style="margin-right: 10%; margin-top: 20%;">Enroll</button>
-                                        </form>
+                                        <div class="deadline-creator" style="margin-bottom: 10px;">
+                                                <form method="post" action="/create_deadline/{{course.id}}">
+                                                        {% csrf_token %}
+                                                        <p style="width: 90%; font-size: medium; text-align: center;">Create new deadline</p>
+                                                        {{deadline_form.title}}
+                                                        <label style="font-size: medium;">
+                                                                {{deadline_form.due_date.label_tag}}
+                                                        </label>
+                                                        {{deadline_form.due_date}}
+                                                        <input type="hidden" name="user" value={{user.username}} />
+                                                        <button type="submit" class="btn btn-warning btn-sm active" style="width: 90%; margin-top: 15px;">Create Deadline</button>
+                                                </form>
+                                        </div>
                                         {% endif %}
+                                        {% for deadline in deadlines %}
+                                        <div class="border-top border-info border-1" style="width: 90%;">
+                                                <p> Task: {{deadline.title}}
+                                                        <text class="float-end">
+                                                                Due by: {{deadline.due_date}}
+                                                        </text>
+                                                </p>
+                                        </div>
+                                        {% endfor %}
                                 </div>
                         </div>
                 </div>

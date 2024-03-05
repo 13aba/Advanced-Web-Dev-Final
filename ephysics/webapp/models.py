@@ -38,8 +38,8 @@ class Post(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
     created = models.DateField(editable=False)
-    image = models.ImageField(upload_to="images/")
-    file = models.FileField(upload_to="files/")
+    image = models.ImageField(upload_to="images/", blank=True)
+    file = models.FileField(upload_to="files/", blank=True)
 
 class Enrollment(models.Model):
     student = models.ForeignKey(AppUser, on_delete=models.CASCADE)

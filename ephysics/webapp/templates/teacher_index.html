@@ -21,6 +21,11 @@
                         <!-- Column for status !-->
                         <div class="col-5">
                                 <h2 > Status </h2>
+                                <form id="status-form" method="post" action="/create_status/">
+                                        {% csrf_token %}
+                                        {{status_form.content}}
+                                        <input class="btn btn-info btn-lg active " style="width: 100%; margin-top: 10px;"  type="submit" name="submit" value="Post Status" />
+                                </form>
                                 {% for update in status %}
                                 <div class="card" style="margin-bottom: 10px;">
                                         <div class="card-body">
@@ -29,11 +34,6 @@
                                         </div>
                                 </div>
                                 {% endfor %}
-                                <form id="status-form" method="post" action="/create_status/">
-                                        {% csrf_token %}
-                                        {{status_form.content}}
-                                        <input class="btn btn-info btn-lg active " style="width: 100%; margin-top: 10px;"  type="submit" name="submit" value="Post Status" />
-                                </form>
                         </div>
                 </div>
         </div>

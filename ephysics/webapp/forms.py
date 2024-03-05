@@ -41,6 +41,6 @@ class CourseForm(forms.Form):
 class StatusForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Update your status', 'style': 'width: 100%; resize: None; height: 100px;', 'class': 'form-control'}))
 
-class PostForm(forms.Form):
-    title = forms.CharField()
-    geeks_field = forms.ImageField()
+class DeadlineForm(forms.Form):
+    title = forms.CharField(label='Task', widget=forms.TextInput(attrs={'placeholder': 'Deadline task', 'style': 'width: 90%; height: 30px; font-size: 20px;', 'class': 'form-control'}))
+    due_date = forms.DateField(label='Due by:', widget=forms.SelectDateWidget(attrs={'style': 'width: 90%; height: 30px; font-size: 15px; padding-top: 0px; margin-bottom: 2px;', 'class': 'form-control'}))
