@@ -38,6 +38,8 @@ class Post(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
     created = models.DateField(editable=False)
+    image = models.ImageField(upload_to="images/")
+    file = models.FileField(upload_to="files/")
 
 class Enrollment(models.Model):
     student = models.ForeignKey(AppUser, on_delete=models.CASCADE)
@@ -54,3 +56,11 @@ class Status(models.Model):
 
     def __str__(self):
         return f"{self.user.user.username} added new status at {self.created_at}"
+
+class Deadline(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=20)
+    due_date = models.DateField(editable=False)
+
+    def __str__(self):
+        return f"{self.course.title} have deadline at {self.due_date}"

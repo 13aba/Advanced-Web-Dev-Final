@@ -8,8 +8,8 @@
                 <div class="row">
                         <div class="col-8">
                                 <h2 class="display-2 text-light">{{course.title}}</h2>
-                                <h3 class="text-light">{{course.description}}</h3>
-                                <h4 class="text-light">Created By: 
+                                <h5 class="text-light">{{course.description}}</h3>
+                                <h5 class="text-light">Created By: 
                                         <text class="text-warning">
                                                 {{course.teacher.first_name}} {{course.teacher.last_name}}
                                         </text>
@@ -31,6 +31,43 @@
                                 </form>
                                 {% endif %}  
                         </div>
+                        {% else %}
+                        <div class="col-4">
+                                {% if request.user.appuser == course.teacher %}
+                                <!-- Button trigger modal -->
+                                <button type="button" class="float-end btn btn-danger btn-xlg active" style="margin-right: 10%; margin-top: 20%;" data-bs-toggle="modal" data-bs-target="#deleteConfirmation">
+                                        Delete Course
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                        <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+                                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                                Course {{course}} will be deleted permanently. This action is irreverisble.
+                                                                Delete the course? 
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                <form method="post" action="/delete_course/{{course.id}}">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="user" value={{user.username}} /> 
+                                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                {% endif %}
+                        </div>
                         {% endif %}
                 </div>
         </div>
@@ -40,11 +77,21 @@
                         <div class="col-8 border-end border-primary border-2" >
                                 <div class="course-post">
                                         <h3>Course content</p>
+                                        {% if request.user.appuser == course.teacher %}
+                                        <a class="btn btn-info btn-lg active" style="width: 90%;" href="/create_post/" role="button">Create Post</a>       
+                                        {% endif %}
                                 </div>
                         </div>
                         <div class="col-4">
                                 <div class="course-deadline">
                                         <h3>Important dates</p>
+                                        {% if request.user.appuser == course.teacher %}
+                                        <form method="post" action="/enroll_course/{{course.id}}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="user" value={{user.username}} />
+                                                <button type="submit" class="float-end btn btn-warning btn-xlg active" style="margin-right: 10%; margin-top: 20%;">Enroll</button>
+                                        </form>
+                                        {% endif %}
                                 </div>
                         </div>
                 </div>

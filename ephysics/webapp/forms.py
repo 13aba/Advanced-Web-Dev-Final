@@ -40,3 +40,7 @@ class CourseForm(forms.Form):
 
 class StatusForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Update your status', 'style': 'width: 100%; resize: None; height: 100px;', 'class': 'form-control'}))
+
+class PostForm(forms.Form):
+    title = forms.CharField()
+    geeks_field = forms.ImageField()
