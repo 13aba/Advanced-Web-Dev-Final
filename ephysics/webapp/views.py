@@ -141,15 +141,27 @@ def course(request, pk):
     user = request.user.appuser
 
 
-    #Check if user is already enrolled to the course
+    #Check if user is already enrolled to the course 
     try:
         course = Course.objects.get(id = pk)
         enrollment = Enrollment.objects.get(course = course, student = user)
         #If user is already enrolled send that information to frontend
         is_enrolled = True
+        
     except:
         #If user is not enrolled
         is_enrolled = False 
+
+    #Check if user is already submitted feedback
+    try:
+        course = Course.objects.get(id = pk)
+        feedback = Feedback.objects.get(course = course, student = user)
+        #If user is already enrolled send that information to frontend
+        feedback_submitted = True
+        
+    except:
+        #If user is not submitted feedback
+        feedback_submitted = False
 
     #Get the enrolled students for the course
     try:
@@ -157,6 +169,12 @@ def course(request, pk):
     except Exception:
         enrollments = None
    
+    #Get the enrolled students for the course
+    try:
+        feedbacks = Feedback.objects.all()
+    except Exception:
+        feedbacks = None
+
     #Get all posts and deadlines related to the course
     posts = Post.objects.filter(course = course)
     deadlines = Deadline.objects.filter(course = course)
@@ -170,7 +188,9 @@ def course(request, pk):
         'posts': posts,
         'deadlines': deadlines,
         'enrollments': enrollments,
-        'feedback_form': feedback_form
+        'feedback_form': feedback_form,
+        'feedbacks': feedbacks,
+        'feedback_submitted': feedback_submitted
     }
     return render(request, 'course.html', context)
 
@@ -492,4 +512,38 @@ def delete_post(request, pk):
         #Return error message and redirect back to home page
         messages.error(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
+
+def create_feedback(request, pk):
     
+    user = request.user.appuser
+    #Check if requested course exist
+    try:
+        course = Course.objects.get(id = pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    if request.method == 'POST':
+        feedback_form = FeedbackForm(request.POST)
+        print(feedback_form.errors)
+        if feedback_form.is_valid():
+            feedback = feedback_form.save(commit=False)
+            # Set the course and student for the feedback
+            feedback.course = course
+            feedback.student = user
+            feedback.date= date.today()
+            feedback.save()
+            # Return a success message and redirect back to course page
+            messages.success(request, 'Feedback submitted successfully.')
+            return redirect(f'/course/{pk}')
+        else:
+             #If form is invalid
+            messages.error(request, 'Something wrong with the request form please check the URL and try again.')
+            return redirect(request.META.get('HTTP_REFERER'))
+
+            
+    else: 
+        #If user tries to access this function outside of POST method
+        messages.error(request, 'Something wrong with the request please check the URL and try again.')
+        return redirect(request.META.get('HTTP_REFERER'))

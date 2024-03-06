@@ -134,14 +134,19 @@
                                 {% if request.user.appuser == course.teacher %}
                                 <div class="student-list">
                                         <h3>Enrolled student</h3>
-                                        <div class="list-group border-secondary border-2" style="width: 90%; border-radius: 15px; margin-bottom: 10px;">
-                                                {% for enrollment in enrollments %}
-                                                <a href="/user/{{enrollment.student.id}}" class="list-group-item list-group-item-action list-group-item-secondary text-danger">{{enrollment.student}} 
-                                                        <text class="float-end">Enrolled: {{enrollment.enrolled_at}}</text>
-                                                        
-                                                </a>
-                                                {% endfor %}
+                                        {% for enrollment in enrollments %}
+                                        <div class="course-container">
+                                                <p>
+                                                        {{enrollment.student.user.username}} 
+                                                        <text class="float-end">
+                                                                Enrolled: {{enrollment.enrolled_at}}
+                                                        </text>
+                                                </p>
+                                                <p>
+                                                        <a class="btn btn-danger btn-sm active" href="/remove_student/{{enrollment.student.id}} role="button">Block Student</a>
+                                                </p>
                                         </div>
+                                        {% endfor %}
                                 </div>
                                 {% endif %}
                         </div>
@@ -149,14 +154,30 @@
                 <div class="divider"></div>
                 <div class="row feedback-section">
                         <h3> Feedbacks </h3>
-                        {% if is_enrolled %}
-                        <form method="post" action="/create_deadline/{{course.id}}">
-                                {% csrf_token %}
-                                <p style="width: 90%; font-size: medium; text-align: center;">Give Feedback</p>
-                                {{feedback_form.as_p}}
-                                <button type="submit" class="btn btn-info btn-lg active">Submit</button>
-                        </form>
+                        {% if is_enrolled  and feedback_submitted == False %}
+                        <div class="course-container">
+                                <form method="post" action="/create_feedback/{{course.id}}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user" value={{user.username}} />
+                                        <p style="width: 90%; font-size: medium; text-align: center;">Give Feedback</p>
+                                        {{feedback_form.as_p}}
+                                        <button type="submit" class="btn btn-info btn-lg active">Submit</button>
+                                </form>
+                        </div>
                         {% endif %}
+
+                        {% for feedback in feedbacks %}
+                        <div class="course-container">
+                                <p>
+                                        User: {{feedback.student}} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                        Score: <text class="text-primary">{{feedback.get_score_text}}</text> 
+                                        <text class="float-end"> {{feedback.date}}</text>
+                                </p>
+                                <p>
+                                        {{feedback.content}}
+                                </p>
+                        </div>
+                        {% endfor %}
                 </div>
         </div>
         

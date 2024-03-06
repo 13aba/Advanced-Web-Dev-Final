@@ -53,6 +53,20 @@ class PostForm(forms.ModelForm):
 
 class FeedbackForm(forms.ModelForm):
 
+    SCORE_CHOICES = (
+        ('1', 'Highly Not Recommended'),
+        ('2', 'Not Recommended'),
+        ('3', 'Neutral'),
+        ('4', 'Recommended'),
+        ('5', 'Highly Recommended'),
+    )
+
+    score = forms.ChoiceField(choices=SCORE_CHOICES, initial='3', widget=forms.Select(attrs={'class': 'form-control', 'style': 'width: 90%;'}))
+
     class Meta : 
         model = Feedback
         fields = ('score', 'content')
+
+        widgets = {
+            'content': forms.TextInput(attrs={'placeholder': 'Feedback for the course', 'style': 'width: 90%; resize: None; height: 70px;', 'class': 'form-control'})
+        }

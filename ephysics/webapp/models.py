@@ -65,7 +65,7 @@ class Deadline(models.Model):
     def __str__(self):
         return f"{self.course.title} have deadline at {self.due_date}"
 
-class Feedback(models.Model):
+class FeedbackChoice:
     SCORE_CHOICES = (
         ('1', 'Highly Not Recommended'),
         ('2', 'Not Recommended'),
@@ -73,11 +73,22 @@ class Feedback(models.Model):
         ('4', 'Recommended'),
         ('5', 'Highly Recommended'),
     )
+
+class Feedback(models.Model):
+    
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     date = models.DateField(editable=False)
-    score = models.IntegerField(choices = SCORE_CHOICES)
+    score = models.CharField(max_length=1, choices = FeedbackChoice.SCORE_CHOICES)
     content = models.TextField()
 
     def __str__(self):
         return f"{self.course.title} have feedback from {self.student}"
+
+    #Referenced from https://forum.djangoproject.com/t/django-get-foo-display-not-working-as-expected/23866/7
+    @property
+    def get_score_text(self):
+        for i in FeedbackChoice.SCORE_CHOICES:
+            if i[0] == self.score:
+                return i[1]
+        return self.score

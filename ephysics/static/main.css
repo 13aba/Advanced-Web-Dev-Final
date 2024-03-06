@@ -102,6 +102,12 @@ h1 {
 					0 0 0 4px white;
 }
 
+.feedback-section {
+    padding-top: 40px;
+    padding-left: 10%;
+
+}
+
 img {
     max-width: 100%;
     height: auto;

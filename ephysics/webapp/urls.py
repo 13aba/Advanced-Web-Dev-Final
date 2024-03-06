@@ -18,4 +18,5 @@ urlpatterns = [
     path('delete_deadline/<int:pk>', views.delete_deadline, name='delete_deadline'),
     path('create_post/<int:pk>', views.create_post, name='create_post'),
     path('delete_post/<int:pk>', views.delete_post, name='delete_post'),
+    path('create_feedback/<int:pk>', views.create_feedback, name='create_feedback'),
 ]
