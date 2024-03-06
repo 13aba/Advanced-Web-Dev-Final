@@ -64,3 +64,20 @@ class Deadline(models.Model):
 
     def __str__(self):
         return f"{self.course.title} have deadline at {self.due_date}"
+
+class Feedback(models.Model):
+    SCORE_CHOICES = (
+        ('1', 'Highly Not Recommended'),
+        ('2', 'Not Recommended'),
+        ('3', 'Neutral'),
+        ('4', 'Recommended'),
+        ('5', 'Highly Recommended'),
+    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    date = models.DateField(editable=False)
+    score = models.IntegerField(choices = SCORE_CHOICES)
+    content = models.TextField()
+
+    def __str__(self):
+        return f"{self.course.title} have feedback from {self.student}"

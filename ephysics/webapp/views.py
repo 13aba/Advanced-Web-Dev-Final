@@ -162,13 +162,15 @@ def course(request, pk):
     deadlines = Deadline.objects.filter(course = course)
 
     deadline_form = DeadlineForm()
+    feedback_form = FeedbackForm()
     context = {
         'course': course,
         'is_enrolled': is_enrolled,
         'deadline_form': deadline_form,
         'posts': posts,
         'deadlines': deadlines,
-        'enrollments': enrollments
+        'enrollments': enrollments,
+        'feedback_form': feedback_form
     }
     return render(request, 'course.html', context)
 

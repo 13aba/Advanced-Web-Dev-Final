@@ -146,6 +146,18 @@
                                 {% endif %}
                         </div>
                 </div>
+                <div class="divider"></div>
+                <div class="row feedback-section">
+                        <h3> Feedbacks </h3>
+                        {% if is_enrolled %}
+                        <form method="post" action="/create_deadline/{{course.id}}">
+                                {% csrf_token %}
+                                <p style="width: 90%; font-size: medium; text-align: center;">Give Feedback</p>
+                                {{feedback_form.as_p}}
+                                <button type="submit" class="btn btn-info btn-lg active">Submit</button>
+                        </form>
+                        {% endif %}
+                </div>
         </div>
         
 </div>
