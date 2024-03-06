@@ -150,7 +150,13 @@ def course(request, pk):
     except:
         #If user is not enrolled
         is_enrolled = False 
-    
+
+    #Get the enrolled students for the course
+    try:
+        enrollments = Enrollment.objects.filter(course = course)
+    except Exception:
+        enrollments = None
+   
     #Get all posts and deadlines related to the course
     posts = Post.objects.filter(course = course)
     deadlines = Deadline.objects.filter(course = course)
@@ -161,7 +167,8 @@ def course(request, pk):
         'is_enrolled': is_enrolled,
         'deadline_form': deadline_form,
         'posts': posts,
-        'deadlines': deadlines
+        'deadlines': deadlines,
+        'enrollments': enrollments
     }
     return render(request, 'course.html', context)
 
