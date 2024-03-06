@@ -142,8 +142,39 @@
                                                                 Enrolled: {{enrollment.enrolled_at}}
                                                         </text>
                                                 </p>
-                                                <p>
-                                                        <a class="btn btn-danger btn-sm active" href="/remove_student/{{enrollment.student.id}} role="button">Block Student</a>
+                                                <p>     
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-danger btn-sm active" data-bs-toggle="modal" data-bs-target="#blockConfirmation">
+                                                                Block student
+                                                        </button>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="blockConfirmation" tabindex="-1" role="dialog"
+                                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                        <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="exampleModalLabel">Confirm Block</h5>
+                                                                                        <button type="button" class="close" data-bs-dismiss="modal"
+                                                                                                aria-label="Close">
+                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                        {{enrollment.student.user.username}} will be blocked.
+                                                                                        Continue? 
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                        <button type="button" class="btn btn-secondary"
+                                                                                                data-bs-dismiss="modal">Close</button>
+                                                                                        <form method="post" action="/block_student/{{enrollment.student.id}}">
+                                                                                                {% csrf_token %}
+                                                                                                <input type="hidden" name="user" value={{user.username}} /> 
+                                                                                                <button type="submit" class="btn btn-danger">Block</button>
+                                                                                        </form>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
                                                 </p>
                                         </div>
                                         {% endfor %}

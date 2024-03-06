@@ -349,6 +349,19 @@ def enroll_course(request, pk):
             #Send user back to the requested page if requested course doesnot exist
             #Referenced from https://stackoverflow.com/questions/35796195/how-to-redirect-to-previous-page-in-django-after-post-request
             return redirect(request.META.get('HTTP_REFERER'))
+
+        #Check if user is blocked by the teacher
+        try: 
+            blocked = BlockedStudent(teacher = course.teacher, student = user)
+            #If student show up on blockedstudent
+            messages.error(request, 'The teacher of this course blocked you. Unable to enroll')
+            #Send user back to the requested page if requested course doesnot exist
+            return redirect(request.META.get('HTTP_REFERER'))
+        except Exception:
+            #Just pass if student does not show up on blocked list
+            pass
+
+
         #Create new enrollment
         enrollment = Enrollment(student = user,
                                 course = course,
@@ -547,3 +560,41 @@ def create_feedback(request, pk):
         #If user tries to access this function outside of POST method
         messages.error(request, 'Something wrong with the request please check the URL and try again.')
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+def block_student(request, pk):
+
+    user = request.user.appuser
+
+    #Check if requested student exist
+    try:
+        student = AppUser.objects.get(id = pk)
+    except:
+        #If student does not exist
+        messages.error(request, 'Something wrong with the request please check the URL and try again.')
+        return redirect(request.META.get('HTTP_REFERER'))
+    
+    if request.method == 'POST':
+        #Create new blockedstudent object and save it
+        blocked = BlockedStudent(
+                                student = student,
+                                teacher = user
+        )
+        blocked.save()
+        #Remove students from every course our teacher has
+        #Get every course created by the user
+        user_courses = Course.objects.filter(teacher = user)
+        #Get every enrollment from the blocked student to the teacher
+        tbdeleted_enrollments = Enrollment.objects.filter(course__in = user_courses, student = student)
+        #Delete the enrollments
+        tbdeleted_enrollments.delete()
+        #return success message
+        messages.success(request, 'Student blocked successfully!')
+        return redirect(f'/course/{pk}')
+
+    else:
+        messages.error(request, 'Something wrong with the request please check the URL and try again.')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+

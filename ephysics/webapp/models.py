@@ -92,3 +92,10 @@ class Feedback(models.Model):
             if i[0] == self.score:
                 return i[1]
         return self.score
+
+class BlockedStudent(models.Model):
+    teacher = models.ForeignKey(AppUser, related_name='blocked_students', on_delete=models.CASCADE)
+    student = models.ForeignKey(AppUser, related_name='blocked_by_teachers', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.teacher.user.username} blocked {self.student.user.username}"
