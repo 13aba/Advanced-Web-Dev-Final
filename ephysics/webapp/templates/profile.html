@@ -5,38 +5,59 @@
 
 
 {% block content %}
+    <div class="page-header">
         <h1>My Profile</h1>
+    </div>
 
-        <form id="update_profile" method="post" action="/profile/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-            <div>
-                <label for="username">Username:</label>
-                <span>{{ request.user.username }}</span>
+        <div class="profile-page">         
+            <div class="picture-container">
+                {% if profile.image %}
+                    <img src="{{profile.image.url }}" alt="profile-picture" class="profile-picture">
+                {% else %}
+                    <img src="../../media/images/question.jpg" alt="profile-picture" class="profile-picture">
+                {% endif %}
             </div>
-            <!-- Exclude is_student field from profile page -->
-            {{ profile_form.first_name.label_tag }}
-            {{ profile_form.first_name }}
-            {{ profile_form.last_name.label_tag }}
-            {{ profile_form.last_name }}
-            {{ profile_form.age.label_tag }}
-            {{ profile_form.age }}
+            <form id="update_profile" method="post" action="/profile/"
+                    enctype="multipart/form-data">
 
-            <!-- Section for updating password!-->
-            <div>
-                <h2>Change Password</h2>
-                {{ password_form.old_password.label_tag }}
-                {{ password_form.old_password }}
-                {{ password_form.new_password.label_tag }}
-                {{ password_form.new_password }}
-                {{ password_form.confirm_new_password.label_tag }}
-                {{ password_form.confirm_new_password }}
-            </div>
-        
+                {% csrf_token %}
+                <div style="text-align: center;">
+                    <span style="font-size: x-large ;">{{ request.user.username }}</span>
+                </div>
+                <!-- Exclude is_student field from profile page -->
+                {{ profile_form.first_name.label_tag }}
+                {{ profile_form.first_name }}
+                {{ profile_form.last_name.label_tag }}
+                {{ profile_form.last_name }}
+
+                <div class="row">
+                    <div class="col-6">
+                        {{ profile_form.age.label_tag }} {{ profile_form.age }} 
+                    </div>
+                    <div class="col-6">
+                        {{ profile_form.image.label_tag }}
+                        {{ profile_form.image }}
+                    </div>
+                </div>    
+                
+
+                <div class="divider"></div>
+                <!-- Section for updating password!-->
+                <div>
+                    <h2>Change Password</h2>
+                    {{ password_form.old_password.label_tag }}
+                    {{ password_form.old_password }}
+                    {{ password_form.new_password.label_tag }}
+                    {{ password_form.new_password }}
+                    {{ password_form.confirm_new_password.label_tag }}
+                    {{ password_form.confirm_new_password }}
+                </div>
             
+                
 
-            <input type="submit" name="submit" value="Update Profile" />
-        </form>
+                <input type="submit" name="submit" value="Update Profile" />
+            </form>
+        </div>
+        
 
 {% endblock %}

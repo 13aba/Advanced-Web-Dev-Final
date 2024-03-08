@@ -95,6 +95,7 @@ def index(request):
             deadlines = None
 
         context = {
+            'appuser': user,
             'enrollments': enrollments,
             'status': status,
             'status_form': status_form,
@@ -115,6 +116,7 @@ def index(request):
             status = None
 
         context = {
+            'appuser': user,
             'courses' : courses,
             'status': status,
             'status_form': status_form
@@ -201,7 +203,7 @@ def profile(request):
 
     if request.method == 'POST':
         
-        profile_form = UserProfileForm(data = request.POST, instance=profile)
+        profile_form = UserProfileForm(request.POST,  request.FILES, instance=profile)
         
         if profile_form.is_valid():
             #Save profile if form is valid and successful message
@@ -255,6 +257,7 @@ def profile(request):
     context = {
         'password_form': password_form,
         'profile_form': profile_form,
+        'profile': profile
     }
     return render(request, 'profile.html', context)
 

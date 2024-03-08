@@ -3,7 +3,17 @@
 
 {% block content %}
 <div class="content">
-        <h1>Hello {{user.username}}</h1>
+        <div class="page-header">
+                <h1>Hello {{user.username}}</h1>
+                <div class="picture-icon">
+                        {% if appuser.image %}
+                                <img src="{{appuser.image.url }}" alt="profile-icon" class="profile-picture">
+                        {% else %}
+                                <img src="../../media/images/question.jpg" alt="profile-icon" class="profile-picture">
+                        {% endif %}
+                </div>
+        </div>
+
         <div class="container">
                 <div class="row full-height" >
                         <!-- Column for courses !-->

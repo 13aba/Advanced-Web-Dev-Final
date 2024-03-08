@@ -16,12 +16,24 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta : 
         model = AppUser
-        fields = ('first_name', 'last_name', 'age', 'is_student')
+        fields = ('first_name', 'last_name', 'age', 'is_student', 'image')
+    
+        widgets = {
+                'first_name': forms.TextInput(attrs={'placeholder': 'New First Name',  'class': ' form-control'}),
+                'last_name': forms.TextInput(attrs={'placeholder': 'New Last Name', 'class': ' form-control'}),
+                'age': forms.NumberInput(attrs={'class': 'field-half form-control'}),
+                'is_student': forms.RadioSelect(choices=[(True, "Yes"), (False, "No")]),
+                'image' : forms.FileInput(attrs={'id': 'field-image', 'class': 'form-control'})
+            }
+
+        labels = {
+                'image': 'Profile Picture'
+        }
 
 class PasswordChangeForm(forms.Form):
-    old_password = forms.CharField(required=False, label="Old Password", widget=forms.PasswordInput)
-    new_password = forms.CharField(required=False, label="New Password", widget=forms.PasswordInput)
-    confirm_new_password = forms.CharField(required=False, label="Confirm New Password", widget=forms.PasswordInput)
+    old_password = forms.CharField(required=False, label="Old Password", widget=forms.PasswordInput(attrs={ 'class': ' form-control'}))
+    new_password = forms.CharField(required=False, label="New Password", widget=forms.PasswordInput(attrs={ 'class': ' form-control'}))
+    confirm_new_password = forms.CharField(required=False, label="Confirm New Password", widget=forms.PasswordInput(attrs={'class': ' form-control'}))
 
     def clean(self):
         #Clean the data
