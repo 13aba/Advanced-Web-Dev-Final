@@ -1,0 +1,38 @@
+{% extends "./base.html" %}
+
+
+
+{% block content %}
+<div class="content">
+        <div class="page-header">
+                <h1> Users </h1>
+        </div>
+        <div class="users-container" style="width: 80%; margin-left: 10%;">
+            {% for user in users %}
+                <!-- Referenced and modified from https://getbootstrap.com/docs/5.0/components/card/ !-->
+                <div onclick="location.href='#';" class="card " style="cursor: pointer; width: 90%;margin:auto; border-radius: 15px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="picture-icon" style="height: 70px; display: flex; ">
+                                    {% if user.image %}
+                                            <img src="{{user.image.url }}" alt="profile-icon" class="profile-picture">
+                                    {% else %}
+                                            <img src="../../media/images/question.jpg" alt="profile-icon" class="profile-picture">
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title">{{user.user.username}}</h5>
+                            </div>
+                            <div class="col" style="align-items: center; display: flex;">
+                                <p class="card-text">{{user.first_name}} {{user.last_name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Page divider !-->
+                <div class="divider"></div>
+            {% endfor %}
+        </div>
+        
+</div>
+{% endblock %}

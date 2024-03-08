@@ -600,4 +600,27 @@ def block_student(request, pk):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
+def users(request):
+    
+    #Get all the users
+    users = AppUser.objects.all()
+    context = {
+        'users': users
+    }
+    #Render html with all users data
+    return render(request, 'users.html', context)
+
+def user(request, pk):
+    #Check if the request user exist
+    try:
+        user_profile = AppUser.objects.get(id = pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    #Render the user profile using the data from our query
+    return render(request, 'user.html', context)  
+
+
 
