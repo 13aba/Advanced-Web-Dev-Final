@@ -47,8 +47,8 @@ class PasswordChangeForm(forms.Form):
         return cleaned_data
 
 class CourseForm(forms.Form):
-    title = forms.CharField(label="Course Title")
-    description = forms.CharField(label="Course Description", widget=forms.Textarea)
+    title = forms.CharField(label="Course Title", widget=forms.TextInput(attrs={'placeholder': 'Course title', 'style': 'width: 90%; resize: None; height: 30px;', 'class': 'form-control'}))
+    description = forms.CharField(label="Course Description", widget=forms.Textarea(attrs={'placeholder': 'Brief course description', 'style': 'width: 90%; resize: None; height: 60px;', 'class': 'form-control'}))
 
 class StatusForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Update your status', 'style': 'width: 100%; resize: None; height: 100px;', 'class': 'form-control'}))
@@ -62,6 +62,13 @@ class PostForm(forms.ModelForm):
     class Meta : 
         model = Post
         fields = ('title', 'content','image', 'file')
+
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Post title', 'style': 'width: 90%; resize: None; height: 30px;', 'class': 'form-control'}), 
+            'content': forms.TextInput(attrs={'placeholder': 'Content of your post', 'style': 'width: 90%; resize: None; height: 50px;', 'class': 'form-control'}),
+            'image': forms.FileInput(attrs={ 'style': 'width: 90%;',  'class': 'form-control'}), 
+            'file': forms.FileInput(attrs={ 'style': 'width: 90%;', 'class': 'form-control'})
+        }
 
 class FeedbackForm(forms.ModelForm):
 

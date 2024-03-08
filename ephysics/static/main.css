@@ -8,6 +8,7 @@
     padding-top: 10px;
     padding-left: 20px;
     background-color: #F7F5F4;
+    margin-bottom: 50px;
 }
 
 .content {
@@ -150,5 +151,16 @@ img {
     border-color: black;
     overflow: hidden;
 }
+
+.create-container {
+    width: 80%;
+    margin-left: 10%;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    padding: 40px;
+    background-color: azure;
+}   
 
 
