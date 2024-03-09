@@ -61,7 +61,7 @@ def login_view(request):
             return redirect('/')
     
         else:
-            messages.error(request, "Invalid login details supplied.")
+            messages.warning(request, "Invalid login details supplied.")
             return redirect('/login')
     else:
         return render(request, 'login.html')
@@ -142,10 +142,15 @@ def course(request, pk):
     #Get the user profile from request
     user = request.user.appuser
 
+    try: 
+        course = Course.objects.get(id = pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
+        return redirect(request.META.get('HTTP_REFERER'))
 
     #Check if user is already enrolled to the course 
     try:
-        course = Course.objects.get(id = pk)
         enrollment = Enrollment.objects.get(course = course, student = user)
         #If user is already enrolled send that information to frontend
         is_enrolled = True
@@ -210,7 +215,7 @@ def profile(request):
             profile.save()
         else:
             #Error message if profile form is not valid  
-            messages.error(request, profile_form.errors)
+            messages.warning(request, profile_form.errors)
             #Return user to profile section
             return redirect('/profile') 
 
@@ -230,7 +235,7 @@ def profile(request):
                             user.set_password(new_password)
                             user.save()
                         except Exception:
-                            messages.error(request, "Problem changing password")
+                            messages.warning(request, "Problem changing password")
                             return redirect('/profile')
                         #Update session authorization so users dont get redirected to login page from our middleware
                         update_session_auth_hash(request, user) 
@@ -238,12 +243,12 @@ def profile(request):
                         return redirect('/profile')
                     else:
                         # No backend authenticated the credentials
-                        messages.error(request, 'Old password is not correct')
+                        messages.warning(request, 'Old password is not correct')
                         return redirect('/profile')
             else:
                 #Send error message if password form is valid
                 for error in password_form.errors:
-                    messages.error(request, password_form.errors[error]) 
+                    messages.warning(request, password_form.errors[error]) 
                 return redirect('/profile')
 
         #If everythins correct and valid push succesful message and redirect user to profile page
@@ -282,7 +287,7 @@ def create_course(request):
             return redirect('/')
         else:
             #Return error message and redirect back to home page
-            messages.error(request, 'Unable to create course succesfully')
+            messages.warning(request, 'Unable to create course succesfully')
             return redirect('/')
     else:
         course_form = CourseForm()
@@ -312,11 +317,11 @@ def create_status(request):
            
         else:
             #Return error message and redirect back to home page
-            messages.error(request, 'Unable to create status succesfully')
+            messages.warning(request, 'Unable to create status succesfully')
             return redirect('/')
     else:
         #Return error message and redirect back to home page
-        messages.error(request, 'Unable to create status succesfully')
+        messages.warning(request, 'Unable to create status succesfully')
         return redirect('/')
     
 
@@ -335,7 +340,7 @@ def delete_course(request, pk):
             return redirect('/')
         else:
             #Return error message and redirect back to home page
-            messages.error(request, 'Something wrong with the request please check the URL and try again')
+            messages.warning(request, 'Something wrong with the request please check the URL and try again')
             return redirect('/')
 
 
@@ -348,16 +353,16 @@ def enroll_course(request, pk):
         try:
             course = Course.objects.get(id = pk)
         except Exception:
-            messages.error(request, 'Could not find the course, try again later')
+            messages.warning(request, 'Could not find the course, try again later')
             #Send user back to the requested page if requested course doesnot exist
             #Referenced from https://stackoverflow.com/questions/35796195/how-to-redirect-to-previous-page-in-django-after-post-request
             return redirect(request.META.get('HTTP_REFERER'))
 
         #Check if user is blocked by the teacher
         try: 
-            blocked = BlockedStudent(teacher = course.teacher, student = user)
+            blocked = BlockedStudent.objects.get(teacher = course.teacher, student = user)
             #If student show up on blockedstudent
-            messages.error(request, 'The teacher of this course blocked you. Unable to enroll')
+            messages.warning(request, 'The teacher of this course blocked you. Unable to enroll')
             #Send user back to the requested page if requested course doesnot exist
             return redirect(request.META.get('HTTP_REFERER'))
         except Exception:
@@ -378,7 +383,7 @@ def enroll_course(request, pk):
         return redirect(f'/course/{pk}')
     else:
         #If anything wrong show error message and redirect back to last page
-        messages.error(request, 'Something wrong with the enroll request try again')
+        messages.warning(request, 'Something wrong with the enroll request try again')
         #Send user back to the requested page if requested course doesnot exist
         return redirect(request.META.get('HTTP_REFERER'))
         
@@ -391,7 +396,7 @@ def leave_course(request, pk):
         try:
             course = Course.objects.get(id = pk)
         except Exception:
-            messages.error(request, 'Could not find the course, try again later')
+            messages.warning(request, 'Could not find the course, try again later')
             #Send user back to the requested page if requested course doesnot exist
             #Referenced from https://stackoverflow.com/questions/35796195/how-to-redirect-to-previous-page-in-django-after-post-request
             return redirect(request.META.get('HTTP_REFERER'))
@@ -404,7 +409,7 @@ def leave_course(request, pk):
         return redirect(f'/course/{pk}')
     else:
         #If anything wrong show error message and redirect back to last page
-        messages.error(request, 'Something wrong with the enroll request try again')
+        messages.warning(request, 'Something wrong with the enroll request try again')
         #Send user back to the requested page if requested course doesnot exist
         return redirect(request.META.get('HTTP_REFERER'))
 
@@ -418,7 +423,7 @@ def create_deadline(request, pk):
         course = Course.objects.get(id = pk)
     except:
         #If course does not exist send user back after sending error message
-        messages.error(request, 'Something wrong with the enroll request try again')
+        messages.warning(request, 'Something wrong with the enroll request try again')
         #Send user back to the requested page if requested course doesnot exist
         return redirect(request.META.get('HTTP_REFERER'))
 
@@ -438,11 +443,11 @@ def create_deadline(request, pk):
            
         else:
             #Return error message and redirect back to home page
-            messages.error(request, 'Unable to create status succesfully')
+            messages.warning(request, 'Unable to create status succesfully')
             return redirect('/')
     else:
         #Return error message and redirect back to home page
-        messages.error(request, 'Unable to create deadline, please try again')
+        messages.warning(request, 'Unable to create deadline, please try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
 def delete_deadline(request, pk):
@@ -453,7 +458,7 @@ def delete_deadline(request, pk):
         deadline = Deadline.objects.get(id=pk)
     except:
         #Return error message and redirect back to previous page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
     #Check if teacher requesting deletion is the teacher that created the course
@@ -464,7 +469,7 @@ def delete_deadline(request, pk):
         return redirect(request.META.get('HTTP_REFERER'))
     else:
         #Return error message and redirect back to home page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
 def create_post(request, pk):
@@ -475,7 +480,7 @@ def create_post(request, pk):
         course = Course.objects.get(id = pk)
     except:
         #Return error message and redirect back to previous page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
     if request.method == 'POST':
@@ -493,7 +498,7 @@ def create_post(request, pk):
                 return redirect(f'/course/{pk}')
         else:
             #Return error message and redirect back to previous page
-            messages.error(request, 'Not authorized reqeust, please try again later!')
+            messages.warning(request, 'Not authorized reqeust, please try again later!')
             return redirect(request.META.get('HTTP_REFERER'))
             
     else:
@@ -515,7 +520,7 @@ def delete_post(request, pk):
         post = Post.objects.get(id=pk)
     except:
         #Return error message and redirect back to previous page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
     #Check if teacher requesting deletion is the teacher that created the course
@@ -526,7 +531,7 @@ def delete_post(request, pk):
         return redirect(request.META.get('HTTP_REFERER'))
     else:
         #Return error message and redirect back to home page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
 def create_feedback(request, pk):
@@ -537,12 +542,11 @@ def create_feedback(request, pk):
         course = Course.objects.get(id = pk)
     except:
         #Return error message and redirect back to previous page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
     if request.method == 'POST':
         feedback_form = FeedbackForm(request.POST)
-        print(feedback_form.errors)
         if feedback_form.is_valid():
             feedback = feedback_form.save(commit=False)
             # Set the course and student for the feedback
@@ -555,13 +559,13 @@ def create_feedback(request, pk):
             return redirect(f'/course/{pk}')
         else:
              #If form is invalid
-            messages.error(request, 'Something wrong with the request form please check the URL and try again.')
+            messages.warning(request, 'Something wrong with the request form please check the URL and try again.')
             return redirect(request.META.get('HTTP_REFERER'))
 
             
     else: 
         #If user tries to access this function outside of POST method
-        messages.error(request, 'Something wrong with the request please check the URL and try again.')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again.')
         return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -574,7 +578,7 @@ def block_student(request, pk):
         student = AppUser.objects.get(id = pk)
     except:
         #If student does not exist
-        messages.error(request, 'Something wrong with the request please check the URL and try again.')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again.')
         return redirect(request.META.get('HTTP_REFERER'))
     
     if request.method == 'POST':
@@ -593,12 +597,33 @@ def block_student(request, pk):
         tbdeleted_enrollments.delete()
         #return success message
         messages.success(request, 'Student blocked successfully!')
-        return redirect(f'/course/{pk}')
-
-    else:
-        messages.error(request, 'Something wrong with the request please check the URL and try again.')
         return redirect(request.META.get('HTTP_REFERER'))
 
+    else:
+        messages.warning(request, 'Something wrong with the request please check the URL and try again.')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+def unblock_student(request, pk):
+
+    user = request.user.appuser
+
+    #Check if student exist
+    try:
+        student = AppUser.objects.get(id = pk)
+    except: 
+        messages.warning(request, 'Something wrong with the request please check the URL and try again.')
+        return redirect(request.META.get('HTTP_REFERER'))
+    #Make sure student is blocked
+    try: 
+        block = BlockedStudent.objects.get(teacher = user, student= student)
+        #Delete that block if exist
+        block.delete()
+        #Send success message
+        messages.success(request, 'Student unblocked successfully!')
+        return redirect(request.META.get('HTTP_REFERER'))
+    except:
+        messages.warning(request, 'Something wrong with the request please check the URL and try again.')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 def users(request):
     
@@ -612,16 +637,27 @@ def users(request):
 
 def user(request, pk):
     #Check if the request user exist
+    user = request.user.appuser
     try:
         user_profile = AppUser.objects.get(id = pk)
     except:
         #Return error message and redirect back to previous page
-        messages.error(request, 'Something wrong with the request please check the URL and try again')
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
-
+    #Check if user is blocked
+    try:
+        blocked = BlockedStudent.objects.get(teacher=user, student=user_profile)
+    except Exception as error:
+        print(error)
+        blocked = None
+    #Get all status for the user
+    statuses = Status.objects.filter(user = user_profile)
     context = {
-        'user': user
+        'user_profile': user_profile,
+        'statuses': statuses,
+        'blocked': blocked
     }
+    
     #Render the user profile using the data from our query
     return render(request, 'user.html', context)  
 

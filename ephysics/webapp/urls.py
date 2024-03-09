@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete_post/<int:pk>', views.delete_post, name='delete_post'),
     path('create_feedback/<int:pk>', views.create_feedback, name='create_feedback'),
     path('block_student/<int:pk>', views.block_student, name='block_student'),
+    path('unblock_student/<int:pk>', views.unblock_student, name='unblock_student'),
     path('users/', views.users, name='users'),
     path('user/<int:pk>', views.user, name='user'),
 ]

@@ -1,0 +1,104 @@
+{% extends "./base.html" %}
+
+
+
+
+
+{% block content %}
+    <div class="page-header">
+        <div class="picture-icon" style="margin-right: 10px;">
+            {% if profile.image %}
+                <img src="{{profile.image.url }}" alt="profile-picture" class="profile-picture">
+            {% else %}
+                <img src="../../media/images/question.jpg" alt="profile-picture" class="profile-picture">
+            {% endif %}
+        </div>
+        <div class="username_container">
+            <h2>{{user_profile.user.username}}</h2>
+            <h5>{{user_profile.first_name}} {{user_profile.last_name}}</h5>
+        </div>
+        <div class="block_student" >
+            <!-- Button trigger modal -->
+            {% if blocked %}
+            <button type="button" class="btn btn-danger btn-lg active" data-bs-toggle="modal" data-bs-target="#unblockConfirmation">
+                Unblock user
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-danger btn-lg active" style="justify-content: flex-end;" data-bs-toggle="modal" data-bs-target="#blockConfirmation">
+                Block user
+            </button>
+            {% endif %}
+            <!-- Modal -->
+            <div class="modal fade" id="blockConfirmation" tabindex="-1" role="dialog"
+                    aria-labelledby="blockModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                    <div class="modal-header">
+                                            <h5 class="modal-title" id="blockModalLabel">Confirm Block</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            {{user_profile.user.username}} will be blocked.
+                                            Continue? 
+                                    </div>
+                                    <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <form method="post" action="/block_student/{{user_profile.id}}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="user" value={{request.user.username}} /> 
+                                                    <button type="submit" class="btn btn-danger">Block</button>
+                                            </form>
+                                    </div>
+                            </div>
+                    </div>
+            </div>
+            <!-- Unblock modal !-->
+            <div class="modal fade" id="unblockConfirmation" tabindex="-1" role="dialog"
+                    aria-labelledby="unblockModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                    <div class="modal-header">
+                                            <h5 class="modal-title" id="unblockModalLabel">Confirm Unblock</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            {{user_profile.user.username}} will be unblocked.
+                                            Continue? 
+                                    </div>
+                                    <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <form method="post" action="/unblock_student/{{user_profile.id}}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="user" value={{request.user.username}} /> 
+                                                    <button type="submit" class="btn btn-danger">Unblock</button>
+                                            </form>
+                                    </div>
+                            </div>
+                    </div>
+            </div>
+        </div>
+        
+       
+    </div>
+
+    <div class="status_container">
+        {% for status in statuses %}
+            <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-body">
+                        {{status.content}}
+                        <p class="float-end text-info">Created: {{status.created_at}}</p>
+                    </div>
+            </div>
+        {% endfor %}
+    </div>
+        
+
+{% endblock %}
