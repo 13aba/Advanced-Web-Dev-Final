@@ -2,19 +2,25 @@
 
 {% block content %}
 
-<h1>Login</h1>
+<!-- Image by rawpixel.com on Freepik !-->
+<div class="background" style="background-image: url(../media/images/background.jpg);">
+    <div class="login_container">
+        <h1>Login</h1>
+        <form id="login_form" method="post" action="/login/">
+            {% csrf_token %}
+            Username: <input class="form-control" type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input class="form-control" type="password" name="password" value="" size="50" />
+            <br />
+            
+            <input class="btn btn-info " type="submit" value="Log In" />
+        </form>
 
-<form id="login_form" method="post" action="/login/">
-{% csrf_token %}
-Username: <input type="text" name="username" value="" size="50" />
-<br />
-Password: <input type="password" name="password" value="" size="50" />
-<br />
+        <strong>Don't have an account? </strong>
+        <a  href="../register/">Sign up</a>
+    </div>
+</div>
 
-<input type="submit" value="submit" />
-</form>
 
-<strong>Don't have an account? </strong>
-<a href="../register/">Sign up</a>
 
 {% endblock %}

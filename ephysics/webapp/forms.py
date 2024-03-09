@@ -5,11 +5,16 @@ from django.contrib.auth.models import User
 
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget = forms.PasswordInput())
+    password = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
 
 class UserProfileForm(forms.ModelForm):
@@ -19,14 +24,15 @@ class UserProfileForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'age', 'is_student', 'image')
     
         widgets = {
-                'first_name': forms.TextInput(attrs={'placeholder': 'New First Name',  'class': ' form-control'}),
-                'last_name': forms.TextInput(attrs={'placeholder': 'New Last Name', 'class': ' form-control'}),
+                'first_name': forms.TextInput(attrs={'placeholder': 'First Name',  'class': ' form-control'}),
+                'last_name': forms.TextInput(attrs={'placeholder': 'Last Name', 'class': ' form-control'}),
                 'age': forms.NumberInput(attrs={'class': 'field-half form-control'}),
                 'is_student': forms.RadioSelect(choices=[(True, "Yes"), (False, "No")]),
                 'image' : forms.FileInput(attrs={'id': 'field-image', 'class': 'form-control'})
             }
 
         labels = {
+                'is_student': 'Are you student?',
                 'image': 'Profile Picture'
         }
 

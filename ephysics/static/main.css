@@ -11,6 +11,15 @@
     margin-bottom: 50px;
 }
 
+.background {
+    height: 100%;
+    width: 100%;
+    background-color: #cccccc;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    padding: 50px;
+}
+
 .content {
     overflow-x: hidden;
     margin: auto;
@@ -184,4 +193,20 @@ img {
 .block_student {
     margin-left: auto;
     padding-right: 10%;
+}
+
+.login_container {
+    width: 500px;
+    margin-left: 10%;
+    padding: 40px;
+    background-color: azure;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+}
+
+.form-control {
+    font-size: smaller;
+    height: 30px;
 }

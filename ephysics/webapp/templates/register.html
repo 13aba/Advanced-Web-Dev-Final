@@ -3,21 +3,44 @@
 
 {% block content %}
 
-        <h1>Register</h1>
-
-        <strong>register here</strong><br />
-
-        <form id="user_form" method="post" action="/register/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
-
-            <input type="submit" name="submit" value="Register" />
-        </form>
+<!-- Image by rawpixel.com on Freepik !-->
+<div class="background" style="background-image: url(../media/images/background.jpg);">
+        <div class="login_container">
+                <h3>Register</h3>
+                <form id="user_form" method="post" action="/register/"
+                        enctype="multipart/form-data">
         
-        <strong> Already registered?</strong>
-        <a href="../login/"> Login here</a>
+                    {% csrf_token %}
+        
+                    {{ user_form.as_p }}
+                    <div class="row">
+                        <div class="col-6">
+                                {{ profile_form.first_name.label_tag }}
+                                {{ profile_form.first_name }}
+                        </div>
+                        <div class="col-6">
+                                {{ profile_form.last_name.label_tag }}
+                                {{ profile_form.last_name }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                                {{ profile_form.age.label_tag }}
+                                {{ profile_form.age }}
+                        </div>
+                        <div class="col-6">
+                                {{ profile_form.is_student.label_tag }}
+                                {{ profile_form.is_student }}
+                        </div>
+                    </div>
+        
+                    <input class="btn btn-info" type="submit" name="submit" value="Register" />
+                </form>
+                
+                <strong> Already registered?</strong>
+                <a  href="../login/"> Login here</a>
+        </div>
+</div>
+
+        
 {% endblock %}

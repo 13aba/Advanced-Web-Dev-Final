@@ -9,7 +9,7 @@ class LoginMiddleware:
         #regist/login page
         if not request.user.is_authenticated:
             # Redirect to the login page
-            if request.path != '/login/' and request.path != '/register/':
+            if request.path != '/login/' and request.path != '/register/' and request.path !='/media/images/background.jpg':
                 return redirect('/login/')
         response = self.get_response(request)
         return response
