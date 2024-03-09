@@ -619,6 +619,9 @@ def user(request, pk):
         messages.error(request, 'Something wrong with the request please check the URL and try again')
         return redirect(request.META.get('HTTP_REFERER'))
 
+    context = {
+        'user': user
+    }
     #Render the user profile using the data from our query
     return render(request, 'user.html', context)  
 

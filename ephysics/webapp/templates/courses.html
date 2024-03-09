@@ -6,27 +6,32 @@
 <div class="content">
         <div class="page-header">
                 <h1> Courses </h1>>
-        </div>  
+        </div> 
+        <div class="search-container form-control" style="height: 60px; width: 90%; margin-left: 5%; margin-bottom: 40px;">
+                <input type="text" placeholder="Search for course" onkeyup="search()"  style="height: 90%; width: 100%;" id="search">
+        </div>
         {% for course in courses %}
-                <!-- Referenced and modified from https://getbootstrap.com/docs/5.0/components/card/ !-->
-                <div class="card " style="width: 90%;margin:auto; border-radius: 15px;">
-                        <div class="card-body">
-                        <h5 class="card-title">{{course.title}}</h5>
-                        <div class="row">
-                                <div class="col">
-                                  <!-- Left-aligned header -->
-                                  <h6 class="card-subtitle mb-2 text-muted">Created: {{course.created}}</h6>
+                <div class="card-container">
+                        <!-- Referenced and modified from https://getbootstrap.com/docs/5.0/components/card/ !-->
+                        <div class="card " style="width: 90%;margin:auto; border-radius: 15px;">
+                                <div class="card-body">
+                                <h5 class="card-title">{{course.title}}</h5>
+                                <div class="row">
+                                        <div class="col">
+                                        <!-- Left-aligned header -->
+                                        <h6 class="card-subtitle mb-2 text-muted">Created: {{course.created}}</h6>
+                                        </div>
+                                        <div class="col text-end">
+                                        <!-- Right-aligned header -->
+                                        <h6 class="card-subtitle mb-2 text-muted">Last Updated: {{course.modified}}</h6>
+                                        </div>
                                 </div>
-                                <div class="col text-end">
-                                  <!-- Right-aligned header -->
-                                  <h6 class="card-subtitle mb-2 text-muted">Last Updated: {{course.modified}}</h6>
+                                <p class="card-text">Description: {{course.description}}</p>
+                                <a href="/course/{{course.id}}" class="btn btn-info  float-end" style="margin-left: 10px;">Go To Course</a>
                                 </div>
                         </div>
-                        <p class="card-text">Description: {{course.description}}</p>
-                        <a href="/course/{{course.id}}" class="btn btn-info  float-end" style="margin-left: 10px;">Go To Course</a>
-                        </div>
-                </div>
-                <div class="divider"></div>
+                        <div class="divider"></div>
+                </div>     
         {% endfor %}
 </div>
 {% endblock %}
