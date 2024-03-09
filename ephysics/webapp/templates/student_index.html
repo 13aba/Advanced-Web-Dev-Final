@@ -5,9 +5,9 @@
 <div class="content">
         <div class="page-header">
                 <h1>Hello {{user.username}}</h1>
-                <div class="picture-icon">
-                        {% if appuser.image %}
-                                <img src="{{appuser.image.url }}" alt="profile-picture" class="profile-picture">
+                <div class="picture-icon" style="height: 60px; display: flex; ">
+                        {% if appuser.icon %}
+                                <img src="{{appuser.icon.url }}" alt="profile-icon-picture" class="profile-picture">
                         {% else %}
                                 <img src="../../media/images/question.jpg" alt="profile-picture" class="profile-picture">
                         {% endif %}

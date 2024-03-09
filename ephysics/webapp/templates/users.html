@@ -19,9 +19,9 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-2">
-                                    <div class="picture-icon" style="height: 70px; display: flex; ">
-                                        {% if user.image %}
-                                                <img src="{{user.image.url }}" alt="profile-icon" class="profile-picture">
+                                    <div class="picture-icon" style="height: 60px; display: flex; ">
+                                        {% if user.icon %}
+                                                <img src="{{user.icon.url }}" alt="profile-icon" class="profile-picture">
                                         {% else %}
                                                 <img src="../../media/images/question.jpg" alt="profile-icon" class="profile-picture">
                                         {% endif %}

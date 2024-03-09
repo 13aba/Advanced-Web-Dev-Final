@@ -12,6 +12,7 @@ class AppUser(models.Model):
     age = models.IntegerField()
     is_student = models.BooleanField()
     image = models.ImageField(upload_to="images/", blank=True)
+    icon = models.FileField(null=True)
 
     def __unicode__ (self):
         return self.user.username
