@@ -1,0 +1,60 @@
+{% extends "./base.html" %}
+
+
+
+{% block content %}
+<div class="content">
+        <!-- Chat UI -->
+    <div id="chat-container">
+        <h2>Chat with: {{other_user.user.username}}</h2>
+        <div id="chat-log"></div><br>
+        <div class="chat-input">
+            <input id="chat-message-input" type="text"><br>
+            <input class="btn btn-info large" id="chat-message-submit" type="button" value="Send">
+        </div>
+    </div>
+
+    <!-- WebSocket Script specifically for Chat -->
+    <script>
+        const roomName = "{{ room_name|escapejs }}";
+        const chatSocket = new WebSocket( 'ws://'  + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            message = document.createElement('p');
+            // Check if the message is from the current user
+            if (data.sender === '{{ request.user.id|escapejs }}' ) {
+                message.classList.add( 'my-message');
+            } else {
+                message.classList.add('other-message');
+            }
+            message.classList.add('chat-message', 'clear');
+            message.textContent = data.message;
+            document.querySelector('#chat-log').appendChild(message);
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+
+            const messagePayload = {
+                'message': message,
+                'sender': '{{ request.user.id|escapejs }}'
+            };
+            chatSocket.send(JSON.stringify(messagePayload));
+            messageInputDom.value = '';
+        };
+    </script>
+</div>
+{% endblock %}

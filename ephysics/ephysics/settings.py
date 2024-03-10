@@ -26,20 +26,25 @@ SECRET_KEY = 'django-insecure--*tv)i=-_i34pqge)9s9!8lao-8!iz-k6obtxhny-n@_r2n!+a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap5',
+    'channels',
+    'webapp',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webapp.apps.WebappConfig',
-    'bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +78,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ephysics.wsgi.application'
+
+ASGI_APPLICATION = 'ephysics.asgi.application'
 
 
 # Database
@@ -134,3 +141,12 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # This is the default location for a locally running Redis server
+        },
+    },
+}

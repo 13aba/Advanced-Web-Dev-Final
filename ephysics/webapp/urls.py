@@ -25,4 +25,5 @@ urlpatterns = [
     path('user/<int:pk>', views.user, name='user'),
     path('notifications/mark_notifications_read/', views.mark_notifications_read, name='mark_notifications_read'),
     path('notifications/get_notifications/', views.get_notifications, name='get_notifications'),
+    path('chat_room/<int:pk>/', views.chat_room, name='chat_room'),
 ]

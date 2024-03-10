@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import *
 from .models import *
 from .tasks import *
@@ -687,4 +688,25 @@ def user(request, pk):
     return render(request, 'user.html', context)  
 
 
+def chat_room(request, pk):
+    current_user_id = request.user.appuser.id
+    other_user_id = pk
+    room_name = generate_room_name(current_user_id, other_user_id)
+    
+    #get other users information
+    try:
+        other_user = AppUser.objects.get(id = pk)
+    except:
+        #Return error message and redirect back to previous page
+        messages.warning(request, 'Something wrong with the request please check the URL and try again')
+        return redirect('/')
 
+    context = {
+        'room_name': room_name,
+        'other_user': other_user
+    }
+    return render(request, 'chat.html', context)
+
+def generate_room_name(user1_id, user2_id):
+    """Generate a unique room name based on user IDs."""
+    return "_".join(sorted([str(user1_id), str(user2_id)]))
