@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .api import *
 from . import views 
 
+#Router for my projects api
 router = DefaultRouter()
 router.register(r'appusers', AppUserViewSet)
 router.register(r'courses', CourseViewSet)

@@ -26,7 +26,7 @@ class Course(models.Model):
     
     title = models.CharField(max_length=20)
     description = models.TextField()
-    created = models.DateField(editable=False)
+    created = models.DateField()
     modified = models.DateField()
     teacher = models.ForeignKey(AppUser, on_delete=models.CASCADE)
 
@@ -39,14 +39,14 @@ class Post(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     content = models.TextField()
-    created = models.DateField(editable=False)
+    created = models.DateField()
     image = models.ImageField(upload_to="images/", blank=True)
     file = models.FileField(upload_to="files/", blank=True)
 
 class Enrollment(models.Model):
     student = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    enrolled_at = models.DateField(editable=False)
+    enrolled_at = models.DateField()
 
     def __str__(self):
         return f"{self.student.user.username} enrolled in {self.course.title}"
@@ -54,7 +54,7 @@ class Enrollment(models.Model):
 class Status(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     content = models.TextField()
-    created_at = models.DateField(editable=False)
+    created_at = models.DateField()
 
     def __str__(self):
         return f"{self.user.user.username} added new status at {self.created_at}"
@@ -62,7 +62,7 @@ class Status(models.Model):
 class Deadline(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
-    due_date = models.DateField(editable=False)
+    due_date = models.DateField()
 
     def __str__(self):
         return f"{self.course.title} have deadline at {self.due_date}"
@@ -80,13 +80,14 @@ class Feedback(models.Model):
     
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(AppUser, on_delete=models.CASCADE)
-    date = models.DateField(editable=False)
+    date = models.DateField()
     score = models.CharField(max_length=1, choices = FeedbackChoice.SCORE_CHOICES)
     content = models.TextField()
 
     def __str__(self):
         return f"{self.course.title} have feedback from {self.student}"
 
+    #Add property to our model so FrontEnd can display human readable feedbacks instead of just 1-5
     #Referenced from https://forum.djangoproject.com/t/django-get-foo-display-not-working-as-expected/23866/7
     @property
     def get_score_text(self):

@@ -5,6 +5,8 @@ from .models import *
 from .serializers import *
 from django.shortcuts import get_object_or_404
 
+
+#API routes for each models to see ALL user data
 class AppUserViewSet(viewsets.ModelViewSet):
     queryset = AppUser.objects.all()
     serializer_class = AppUserSerializer
@@ -41,6 +43,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
 
+
+#API routes for each models to see INDIVIDUAL user data
 class SingleAppUserAPIView(APIView):
 
     def get(self, request, id, format=None):

@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import *
 
+#Signal created when new Post is saved
 @receiver(post_save, sender=Post)
 def post_created(sender, instance, created, **kwargs):
     if created:
@@ -15,6 +16,7 @@ def post_created(sender, instance, created, **kwargs):
                 message=f'A new post "{instance.title}" has been added to your course: {course.title}.'
             )
 
+#Signal created when new Enrollment is created
 @receiver(post_save, sender=Enrollment)
 def enrollment_created(sender, instance, created, **kwargs):
     if created:

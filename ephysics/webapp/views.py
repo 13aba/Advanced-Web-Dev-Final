@@ -10,10 +10,13 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
+#Decorator used for restircting students from some of our web application
 def teacher_required(view_func):
     def wrapper(request, *args, **kwargs):
+        #If teacher direct to requested view function
         if not request.user.appuser.is_student:  
             return view_func(request, *args, **kwargs)
+        #If student give error message and redirect back to home page
         else:
             #If anything wrong show error message and redirect back to last page
             messages.warning(request, 'You are not authorized for this function/page')
@@ -21,6 +24,7 @@ def teacher_required(view_func):
             return redirect('/')
     return wrapper
 
+#Used to display register page htmls and create new user if method is POST
 def register(request):
     if request.method == 'POST':
         user_form = UserForm(data = request.POST)
@@ -67,12 +71,11 @@ def login_view(request):
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
-
+        #Check if username and password match
         if user:
-            
+            #If credentials are correct login the user and redirect to home
             login(request, user)
             return redirect('/')
-    
         else:
             messages.warning(request, "Invalid login details supplied.")
             return redirect('/login')
@@ -137,24 +140,13 @@ def index(request):
         #Display teacher home page
         return render(request, 'teacher_index.html', context)  
 
-    
-@require_POST
-@csrf_exempt 
-def mark_notifications_read(request):
-    Notification.objects.filter(recipient=request.user.appuser, is_read=False).update(is_read=True)
-    return JsonResponse({'success': True})
-
-def get_notifications(request):
-    notifications = Notification.objects.filter(recipient=request.user.appuser, is_read=False).values('id', 'message')
-    return JsonResponse(list(notifications), safe=False)
-
+  
 def courses(request):
 
     courses = Course.objects.all()
     context = {
         'courses': courses
     }
-
     return render(request, 'courses.html', context)
 
 
@@ -688,9 +680,12 @@ def user(request, pk):
     return render(request, 'user.html', context)  
 
 
+#Logic to render chat room html
 def chat_room(request, pk):
     current_user_id = request.user.appuser.id
     other_user_id = pk
+    #Room name has to be same when two user connect to one chatroom. Implemented new function that
+    #gives same room_name whether user is the number 1 or number 2
     room_name = generate_room_name(current_user_id, other_user_id)
     
     #get other users information
@@ -707,6 +702,19 @@ def chat_room(request, pk):
     }
     return render(request, 'chat.html', context)
 
+#Function create unified name for two users trying to chat with each other
 def generate_room_name(user1_id, user2_id):
-    """Generate a unique room name based on user IDs."""
+    #Generate a unique room name based on user IDs by sorting them and andding it to '_'.
     return "_".join(sorted([str(user1_id), str(user2_id)]))
+
+
+#Function created to handle AJAX scripts for updating and polling notification from backend
+@require_POST
+@csrf_exempt 
+def mark_notifications_read(request):
+    Notification.objects.filter(recipient=request.user.appuser, is_read=False).update(is_read=True)
+    return JsonResponse({'success': True})
+
+def get_notifications(request):
+    notifications = Notification.objects.filter(recipient=request.user.appuser, is_read=False).values('id', 'message')
+    return JsonResponse(list(notifications), safe=False)

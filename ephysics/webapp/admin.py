@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 
-
+#Register the models for admin site
 admin.site.register(AppUser)
 admin.site.register(Course)
 admin.site.register(Post)

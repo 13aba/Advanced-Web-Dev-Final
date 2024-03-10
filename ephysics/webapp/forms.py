@@ -4,6 +4,7 @@ from .models import *
 from django.contrib.auth.models import User
 
 
+#Forms and widgets for giving class to our fields so we can style 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control'}))
 
@@ -76,6 +77,7 @@ class PostForm(forms.ModelForm):
             'file': forms.FileInput(attrs={ 'style': 'width: 90%;', 'class': 'form-control'})
         }
 
+#Map 1-5 to 5 different human readable choices 
 class FeedbackForm(forms.ModelForm):
 
     SCORE_CHOICES = (

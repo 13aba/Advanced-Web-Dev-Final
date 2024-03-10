@@ -4,6 +4,7 @@ from PIL import Image as img
 import io, os
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+#Tasks that will be completed async using Celery workers
 @shared_task
 def create_icon(image_url, user_id):
     try:
