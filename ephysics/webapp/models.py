@@ -12,7 +12,7 @@ class AppUser(models.Model):
     age = models.IntegerField()
     is_student = models.BooleanField()
     image = models.ImageField(upload_to="images/", blank=True)
-    icon = models.FileField(null=True)
+    icon = models.FileField(null=True, blank=True)
 
     def __unicode__ (self):
         return self.user.username
@@ -101,3 +101,12 @@ class BlockedStudent(models.Model):
 
     def __str__(self):
         return f"{self.teacher.user.username} blocked {self.student.user.username}"
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification for {self.recipient.user.username}: {self.message}"

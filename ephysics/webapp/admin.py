@@ -10,6 +10,7 @@ admin.site.register(Status)
 admin.site.register(BlockedStudent)
 admin.site.register(Feedback)
 admin.site.register(Deadline)
+admin.site.register(Notification)
 
 
 

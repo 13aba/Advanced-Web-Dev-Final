@@ -5,7 +5,9 @@ from .tasks import *
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from datetime import date
-
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 def teacher_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -135,7 +137,15 @@ def index(request):
         return render(request, 'teacher_index.html', context)  
 
     
+@require_POST
+@csrf_exempt 
+def mark_notifications_read(request):
+    Notification.objects.filter(recipient=request.user.appuser, is_read=False).update(is_read=True)
+    return JsonResponse({'success': True})
 
+def get_notifications(request):
+    notifications = Notification.objects.filter(recipient=request.user.appuser, is_read=False).values('id', 'message')
+    return JsonResponse(list(notifications), safe=False)
 
 def courses(request):
 

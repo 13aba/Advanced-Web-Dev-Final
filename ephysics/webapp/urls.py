@@ -23,4 +23,6 @@ urlpatterns = [
     path('unblock_student/<int:pk>', views.unblock_student, name='unblock_student'),
     path('users/', views.users, name='users'),
     path('user/<int:pk>', views.user, name='user'),
+    path('notifications/mark_notifications_read/', views.mark_notifications_read, name='mark_notifications_read'),
+    path('notifications/get_notifications/', views.get_notifications, name='get_notifications'),
 ]
