@@ -247,6 +247,8 @@ img {
 
 #chat-log {
     min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
     width: 90%;
     margin-left: 5%;
     padding: 10px;

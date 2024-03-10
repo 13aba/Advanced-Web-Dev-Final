@@ -110,3 +110,4 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.recipient.user.username}: {self.message}"
+

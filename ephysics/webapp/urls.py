@@ -1,5 +1,19 @@
-from django.urls import path
-from . import views
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .api import *
+from . import views 
+
+router = DefaultRouter()
+router.register(r'appusers', AppUserViewSet)
+router.register(r'courses', CourseViewSet)
+router.register(r'post', PostViewSet)
+router.register(r'status', StatusViewSet)
+router.register(r'enrollment', EnrollmentViewSet)
+router.register(r'deadline', DeadlineViewSet)
+router.register(r'feedback', FeedbackViewSet)
+router.register(r'blockedstudents', BlockedStudentViewSet)
+router.register(r'notification', NotificationViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -26,4 +40,14 @@ urlpatterns = [
     path('notifications/mark_notifications_read/', views.mark_notifications_read, name='mark_notifications_read'),
     path('notifications/get_notifications/', views.get_notifications, name='get_notifications'),
     path('chat_room/<int:pk>/', views.chat_room, name='chat_room'),
+    path('api/', include(router.urls)),
+    path('api/appuser/<int:id>/', SingleAppUserAPIView.as_view(), name='single-user-api'),
+    path('api/course/<int:id>/', SingleCourseAPIView.as_view(), name='single-course-api'),
+    path('api/post/<int:id>/', SinglePostAPIView.as_view(), name='single-post-api'),
+    path('api/enrollment/<int:id>/', SingleEnrollmentAPIView.as_view(), name='single-enrollment-api'),
+    path('api/deadline/<int:id>/', SingleDeadlineAPIView.as_view(), name='single-deadline-api'),
+    path('api/status/<int:id>/', SingleStatusAPIView.as_view(), name='single-status-api'),
+    path('api/feedback/<int:id>/', SingleFeedbackAPIView.as_view(), name='single-feedback-api'),
+    path('api/blockedstudent/<int:id>/', SingleBlockedStudentAPIView.as_view(), name='single-blockedstudent-api'),
+    path('api/notification/<int:id>/', SingleNotificationAPIView.as_view(), name='single-notification-api'),
 ]
