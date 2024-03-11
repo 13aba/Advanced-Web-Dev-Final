@@ -7,6 +7,11 @@ class LoginMiddleware:
     def __call__(self, request):
         #If user is not authenticated redirect users to login page when they try access anything other than
         #regist/login page
+        #If user is not authenticated redirect users to login page when they try access anything other than
+        #regist/login page
+        if request.path.startswith('/admin/'):
+            response = self.get_response(request)
+            return response
         if not request.user.is_authenticated:
             # Redirect to the login page
             if request.path != '/login/' and request.path != '/register/' and request.path !='/media/images/background.jpg':
