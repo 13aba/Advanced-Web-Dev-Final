@@ -17,7 +17,7 @@
     <!-- WebSocket Script specifically for Chat -->
     <script>
         const roomName = "{{ room_name|escapejs }}";
-        const chatSocket = new WebSocket( 'ws://'  + window.location.host + '/ws/chat/' + roomName + '/'
+        const chatSocket = new WebSocket( 'wss://'  + window.location.host + '/ws/chat/' + roomName + '/'
         );
 
         chatSocket.onmessage = function(e) {
