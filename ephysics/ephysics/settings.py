@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    'redis://red-cnn65k8cmk4c73aks8e0:6379'
 ]
 
 
@@ -147,7 +148,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],  # This is the default location for a locally running Redis server
+            "hosts": ['redis://red-cnn65k8cmk4c73aks8e0:6379'],  # This is the default location for a locally running Redis server
         },
     },
 }

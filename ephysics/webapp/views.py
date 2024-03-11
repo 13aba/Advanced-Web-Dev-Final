@@ -226,8 +226,7 @@ def profile(request):
         if profile_form.is_valid():
             #Save profile if form is valid and successful message
             profile.save()
-            #Create icon of the uploaded image to display on home page using Celery
-            create_icon.delay(profile.image.url, profile.id)
+            
         else:
             #Error message if profile form is not valid  
             messages.warning(request, profile_form.errors)
