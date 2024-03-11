@@ -29,7 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'redis://red-cnn65k8cmk4c73aks8e0:6379'
+    'redis://red-cnn65k8cmk4c73aks8e0:6379',
+    'advanced-web-dev-final.onrender.com'
 ]
 
 
